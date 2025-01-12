@@ -54,4 +54,5 @@ enum CategoriaTransacao {
   FINANCEIRO
   FREELANCER
   OUTROS
+  FATURA_CARTAO_CREDITO
 }
