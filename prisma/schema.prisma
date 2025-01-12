@@ -17,12 +17,12 @@ model Transacoes {
   id             String             @id @default(uuid())
   nome           String
   tipo           TipoTransacao
-  quantidade     Decimal            @db.Decimal(10, 2)
+  valor          Decimal            @db.Decimal(10, 2)
   categoria      CategoriaTransacao
   status         StatusTransacao
   id_usuario     String
-  data_pagamento DateTime
-  observacao     String
+  data_pagamento DateTime?
+  observacao     String?
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
 
