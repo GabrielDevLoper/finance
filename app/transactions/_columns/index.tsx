@@ -1,28 +1,12 @@
 "use client";
 
 import { Badge } from "@/app/_components/ui/badge";
-import { CategoriaTransacao, Transacoes } from "@prisma/client";
+import { Transacoes } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { CircleIcon, PencilIcon, TrashIcon } from "lucide-react";
 import TransactionTypeBadge from "../_components/type-badge";
 import { Button } from "@/app/_components/ui/button";
-
-const TRANSACTION_CATEGORY_LABELS = {
-  [CategoriaTransacao.ALIMENTACAO]: "Alimentação",
-  [CategoriaTransacao.CASA]: "Casa",
-  [CategoriaTransacao.EDUCACAO]: "Educação",
-  [CategoriaTransacao.FATURA_CARTAO_CREDITO]: "Fatura Cartão de Crédito",
-  [CategoriaTransacao.FINANCEIRO]: "Financeiro",
-  [CategoriaTransacao.FINANCIAMENTO]: "Financiamento",
-  [CategoriaTransacao.FIXA]: "Fixa",
-  [CategoriaTransacao.FREELANCER]: "Freelancer",
-  [CategoriaTransacao.LAZER]: "Lazer",
-  [CategoriaTransacao.OUTROS]: "Outros",
-  [CategoriaTransacao.SALARIO]: "Salário",
-  [CategoriaTransacao.SAUDE]: "Saúde",
-  [CategoriaTransacao.TRANSPORTE]: "Transporte",
-  [CategoriaTransacao.VARIAVEL]: "Variável",
-};
+import { TRANSACTION_CATEGORY_LABELS } from "@/app/_constants/transaction";
 
 export const transactionsColumns: ColumnDef<Transacoes>[] = [
   {
