@@ -7,7 +7,7 @@ import { z } from "zod";
 
 export const addTransactionSchema = z.object({
   nome: z.string().min(1),
-  valor: z.number().positive(),
+  valor: z.number().nullable().optional(),
   tipo: z.nativeEnum(TipoTransacao),
   categoria: z.nativeEnum(CategoriaTransacao),
   status: z.nativeEnum(StatusTransacao),

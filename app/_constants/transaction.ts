@@ -32,19 +32,16 @@ export const TRANSACTION_STATUS_OPTIONS = [
 
 export const TRANSACTION_CATEGORY_LABELS = {
   [CategoriaTransacao.ALIMENTACAO]: "Alimentação",
-  [CategoriaTransacao.CASA]: "Casa",
+  [CategoriaTransacao.MORADIA]: "Moradia",
   [CategoriaTransacao.EDUCACAO]: "Educação",
   [CategoriaTransacao.FATURA_CARTAO_CREDITO]: "Fatura Cartão de Crédito",
   [CategoriaTransacao.FINANCEIRO]: "Financeiro",
   [CategoriaTransacao.FINANCIAMENTO]: "Financiamento",
-  [CategoriaTransacao.FIXA]: "Fixa",
   [CategoriaTransacao.FREELANCER]: "Freelancer",
   [CategoriaTransacao.LAZER]: "Lazer",
-  [CategoriaTransacao.OUTROS]: "Outros",
   [CategoriaTransacao.SALARIO]: "Salário",
   [CategoriaTransacao.SAUDE]: "Saúde",
   [CategoriaTransacao.TRANSPORTE]: "Transporte",
-  [CategoriaTransacao.VARIAVEL]: "Variável",
 };
 
 export const TRANSACTION_CATEGORY_OPTIONS = [
@@ -53,8 +50,8 @@ export const TRANSACTION_CATEGORY_OPTIONS = [
     label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.ALIMENTACAO],
   },
   {
-    value: CategoriaTransacao.CASA,
-    label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.CASA],
+    value: CategoriaTransacao.MORADIA,
+    label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.MORADIA],
   },
   {
     value: CategoriaTransacao.EDUCACAO,
@@ -66,15 +63,13 @@ export const TRANSACTION_CATEGORY_OPTIONS = [
     label:
       TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.FATURA_CARTAO_CREDITO],
   },
-
+  {
+    value: CategoriaTransacao.FINANCIAMENTO,
+    label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.FINANCIAMENTO],
+  },
   {
     value: CategoriaTransacao.FINANCEIRO,
     label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.FINANCEIRO],
-  },
-
-  {
-    value: CategoriaTransacao.FIXA,
-    label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.FIXA],
   },
 
   {
@@ -85,10 +80,7 @@ export const TRANSACTION_CATEGORY_OPTIONS = [
     value: CategoriaTransacao.LAZER,
     label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.LAZER],
   },
-  {
-    value: CategoriaTransacao.OUTROS,
-    label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.OUTROS],
-  },
+
   {
     value: CategoriaTransacao.SALARIO,
     label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.SALARIO],
@@ -100,9 +92,5 @@ export const TRANSACTION_CATEGORY_OPTIONS = [
   {
     value: CategoriaTransacao.TRANSPORTE,
     label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.TRANSPORTE],
-  },
-  {
-    value: CategoriaTransacao.VARIAVEL,
-    label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.VARIAVEL],
   },
 ];

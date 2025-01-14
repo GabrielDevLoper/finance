@@ -84,9 +84,9 @@ const UpserTransactionDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues ?? {
       nome: "",
-      valor: 10,
+      valor: 0,
       observacao: null,
-      categoria: CategoriaTransacao.OUTROS,
+      categoria: CategoriaTransacao.MORADIA,
       tipo: TipoTransacao.DEPOSITO,
       status: StatusTransacao.PENDENTE,
       data_pagamento: undefined,

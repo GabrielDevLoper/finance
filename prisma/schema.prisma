@@ -17,7 +17,7 @@ model Transacoes {
   id             String             @id @default(uuid())
   nome           String
   tipo           TipoTransacao
-  valor          Decimal            @db.Decimal(10, 2)
+  valor          Decimal?           @db.Decimal(10, 2)
   categoria      CategoriaTransacao
   status         StatusTransacao
   id_usuario     String
@@ -45,14 +45,11 @@ enum CategoriaTransacao {
   EDUCACAO
   SAUDE
   LAZER
-  CASA
+  MORADIA
   ALIMENTACAO
   SALARIO
-  FIXA
-  VARIAVEL
   FINANCIAMENTO
   FINANCEIRO
   FREELANCER
-  OUTROS
   FATURA_CARTAO_CREDITO
 }
