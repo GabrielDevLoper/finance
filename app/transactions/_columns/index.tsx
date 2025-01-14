@@ -64,12 +64,20 @@ export const transactionsColumns: ColumnDef<Transacoes>[] = [
   {
     accessorKey: "data_pagamento",
     header: "Data Pagamento",
-    cell: ({ row: { original: transaction } }) =>
-      new Date(transaction.data_pagamento).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
+    cell: ({ row: { original: transaction } }) => {
+      if (transaction.data_pagamento) {
+        return new Date(transaction.data_pagamento).toLocaleDateString(
+          "pt-BR",
+          {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          }
+        );
+      }
+
+      return "";
+    },
   },
   {
     accessorKey: "acoes",

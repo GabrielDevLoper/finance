@@ -16,8 +16,8 @@ interface addTransactionParams {
   tipo: TipoTransacao;
   categoria: CategoriaTransacao;
   status: StatusTransacao;
-  observacao: string | null;
-  data_pagamento: Date | null;
+  observacao?: string | null;
+  data_pagamento?: Date | null;
 }
 
 export const addTransaction = async (params: addTransactionParams) => {

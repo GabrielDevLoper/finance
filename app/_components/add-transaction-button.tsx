@@ -62,8 +62,8 @@ const formSchema = z.object({
   status: z.nativeEnum(StatusTransacao, {
     required_error: "O status é obrigatório",
   }),
-  observacao: z.string().optional(),
-  data_pagamento: z.date().optional(),
+  observacao: z.string().nullable().optional(),
+  data_pagamento: z.date().nullable().optional(),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -76,7 +76,7 @@ const AddTransactionButton = () => {
     defaultValues: {
       nome: "",
       valor: 10,
-      observacao: "",
+      observacao: null,
       categoria: CategoriaTransacao.OUTROS,
       tipo: TipoTransacao.DEPOSITO,
       status: StatusTransacao.PENDENTE,
@@ -226,6 +226,7 @@ const AddTransactionButton = () => {
                     <Textarea
                       placeholder="Digite alguma observação"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
 
@@ -269,7 +270,10 @@ const AddTransactionButton = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Data pagamento</FormLabel>
-                  <DatePicker value={field.value} onChange={field.onChange} />
+                  <DatePicker
+                    value={field.value ?? undefined}
+                    onChange={field.onChange}
+                  />
                   <FormMessage />
                 </FormItem>
               )}

@@ -11,6 +11,6 @@ export const addTransactionSchema = z.object({
   tipo: z.nativeEnum(TipoTransacao),
   categoria: z.nativeEnum(CategoriaTransacao),
   status: z.nativeEnum(StatusTransacao),
-  observacao: z.string(),
-  data_pagamento: z.date(),
+  observacao: z.string().nullable().optional(),
+  data_pagamento: z.date().nullable().optional(),
 });
