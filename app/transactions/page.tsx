@@ -3,9 +3,21 @@ import { DataTable } from "../_components/ui/data-table";
 import { transactionsColumns } from "./_columns";
 import AddTransactionButton from "../_components/add-transaction-button";
 import Navbar from "../_components/navbar";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 const Transactions = async () => {
-  const transactions = await db.transacoes.findMany({});
+  const { userId } = await auth();
+
+  if (!userId) {
+    redirect("/login");
+  }
+
+  const transactions = await db.transacoes.findMany({
+    where: {
+      id_usuario: userId,
+    },
+  });
 
   return (
     <>
