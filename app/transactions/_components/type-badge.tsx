@@ -26,8 +26,8 @@ const TransactionTypeBadge = ({ transaction }: TransactionTypeBadgeProps) => {
   }
 
   return (
-    <Badge className="text-blue-500 bg-blue-500 bg-opacity-10 font-bold hover:bg-muted">
-      <CircleIcon className="fill-blue-500 mr-2" size={10} />
+    <Badge className="text-cyan-500 bg-cyan-500 bg-opacity-10 font-bold hover:bg-muted">
+      <CircleIcon className="fill-cyan-500 mr-2" size={10} />
       Investimento
     </Badge>
   );
