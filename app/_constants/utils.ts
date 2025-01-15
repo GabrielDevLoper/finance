@@ -21,3 +21,18 @@ export const YEARS_OPTIONS = [
   { value: "2029", label: "2029" },
   { value: "2030", label: "2030" },
 ];
+
+export const MONTHS_OPTIONS_LABEL = {
+  ["01"]: "Janeiro",
+  ["02"]: "Fevereiro",
+  ["03"]: "Março",
+  ["04"]: "Abril",
+  ["05"]: "Maio",
+  ["06"]: "Junho",
+  ["07"]: "Julho",
+  ["08"]: "Agosto",
+  ["09"]: "Setembro",
+  ["10"]: "Outubro",
+  ["11"]: "Novembro",
+  ["12"]: "Dezembro",
+};

@@ -6,6 +6,7 @@ import Navbar from "../_components/navbar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import TimeSelect from "../(home)/_components/time-select";
+import { MONTHS_OPTIONS_LABEL } from "../_constants/utils";
 
 interface TransactionsProps {
   searchParams: { month?: string; year?: string };
@@ -33,7 +34,9 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
       <Navbar />
       <div className="p-6 space-y-6">
         <div className="flex w-full justify-between items-center">
-          <h1 className="font-bold text-2xl">Transações </h1>
+          <h1 className="font-bold text-2xl">
+            Transações de {MONTHS_OPTIONS_LABEL[month]} de {year}
+          </h1>
           <TimeSelect url="/transactions" />
           <AddTransactionButton />
         </div>
