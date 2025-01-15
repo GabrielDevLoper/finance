@@ -4,7 +4,7 @@ import { UserButton } from "@clerk/nextjs";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const pathname = usePathname();
