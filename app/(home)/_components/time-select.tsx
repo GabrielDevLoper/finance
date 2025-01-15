@@ -11,12 +11,7 @@ import {
 } from "@/app/_components/ui/select";
 import { MONTH_OPTIONS, YEARS_OPTIONS } from "@/app/_constants/utils";
 
-interface TimeSelectProps {
-  url?: string;
-  onFilterChange?: (filters: { month: string; year: string }) => void;
-}
-
-const TimeSelect = ({ url = "/", onFilterChange }: TimeSelectProps) => {
+const TimeSelect = () => {
   const { push } = useRouter();
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
@@ -24,18 +19,14 @@ const TimeSelect = ({ url = "/", onFilterChange }: TimeSelectProps) => {
   const handleMonthChange = (month: string) => {
     setSelectedMonth(month);
     if (selectedYear) {
-      const filters = { month, year: selectedYear };
-      onFilterChange?.(filters);
-      push(`${url}?month=${month}&year=${selectedYear}`);
+      push(`/?month=${month}&year=${selectedYear}`);
     }
   };
 
   const handleYearChange = (year: string) => {
     setSelectedYear(year);
     if (selectedMonth) {
-      const filters = { month: selectedMonth, year };
-      onFilterChange?.(filters);
-      push(`${url}?month=${selectedMonth}&year=${year}`);
+      push(`/?month=${selectedMonth}&year=${year}`);
     }
   };
 
