@@ -33,7 +33,7 @@ const TimeSelect = ({ url = "/", onFilterChange }: TimeSelectProps) => {
   const handleYearChange = (year: string) => {
     setSelectedYear(year);
     if (selectedMonth) {
-      const filters = { month: selectedMonth, year, teste: "teste" };
+      const filters = { month: selectedMonth, year };
       onFilterChange?.(filters);
       push(`${url}?month=${selectedMonth}&year=${year}`);
     }

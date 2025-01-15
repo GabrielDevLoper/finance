@@ -1,12 +1,16 @@
 "use client";
 
 import { UserButton } from "@clerk/nextjs";
+import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const dataAtual = new Date();
+  const mesAtual = format(dataAtual, "MM");
+  const anoAtual = format(dataAtual, "yyyy");
 
   return (
     <nav className="flex justify-between px-8 py-4 border-b border-solid">
@@ -23,7 +27,7 @@ const Navbar = () => {
           Dashboard
         </Link>
         <Link
-          href={"/transactions"}
+          href={`/transactions?month=${mesAtual}&year=${anoAtual}`}
           className={
             pathname === "/transactions"
               ? "text-primary font bold"
