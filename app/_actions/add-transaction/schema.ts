@@ -10,7 +10,9 @@ export const addTransactionSchema = z.object({
   valor: z.number().nullable().optional(),
   tipo: z.nativeEnum(TipoTransacao),
   categoria: z.nativeEnum(CategoriaTransacao),
-  status: z.nativeEnum(StatusTransacao),
+  status: z.nativeEnum(StatusTransacao).nullable().optional(),
   observacao: z.string().nullable().optional(),
   data_pagamento: z.date().nullable().optional(),
+  ano: z.string().nullable().optional(),
+  mes: z.string().nullable().optional(),
 });

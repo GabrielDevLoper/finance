@@ -11,6 +11,16 @@ import EditTransactionButton from "../_components/edit-transaction-button";
 
 export const transactionsColumns: ColumnDef<Transacoes>[] = [
   {
+    accessorKey: "ano",
+    header: "Competência",
+    cell: ({ row: { original: transaction } }) => (
+      <Badge className="text-white bg-white bg-opacity-10 font-bold hover:bg-muted">
+        <CircleIcon className="fill-white mr-2" size={10} />
+        {transaction.mes}-{transaction.ano}
+      </Badge>
+    ),
+  },
+  {
     accessorKey: "nome",
     header: "Nome",
   },

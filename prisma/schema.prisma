@@ -19,10 +19,12 @@ model Transacoes {
   tipo           TipoTransacao
   valor          Decimal?           @db.Decimal(10, 2)
   categoria      CategoriaTransacao
-  status         StatusTransacao
+  status         StatusTransacao?   @default(PENDENTE)
   id_usuario     String
   data_pagamento DateTime?
   observacao     String?
+  ano            String?
+  mes            String?
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
 

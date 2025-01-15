@@ -16,9 +16,11 @@ interface addTransactionParams {
   valor: number;
   tipo: TipoTransacao;
   categoria: CategoriaTransacao;
-  status: StatusTransacao;
+  status?: StatusTransacao | null;
   observacao?: string | null;
   data_pagamento?: Date | null;
+  ano?: string | null;
+  mes?: string | null;
 }
 
 export const upsertTransaction = async (params: addTransactionParams) => {

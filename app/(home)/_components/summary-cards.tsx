@@ -14,10 +14,8 @@ interface SummaryCardsProps {
 
 const SummaryCards = async ({ month, year }: SummaryCardsProps) => {
   const where = {
-    createdAt: {
-      gte: new Date(`${year}-${month}-01`),
-      lt: new Date(`${year}-${month}-31`),
-    },
+    ano: year,
+    mes: month,
   };
 
   const investimentosTotal = Number(
