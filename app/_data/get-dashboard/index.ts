@@ -4,6 +4,8 @@ import {
   TotalDespesaPorCategoria,
   TransactionPercentagePerType,
 } from "./types";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 type GetDashboardProps = {
   ano: string;
@@ -11,9 +13,16 @@ type GetDashboardProps = {
 };
 
 export const getDashboard = async ({ ano, mes }: GetDashboardProps) => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    redirect("/login");
+  }
+
   const where = {
     ano,
     mes,
+    id_usuario: userId,
   };
 
   const investimentosTotal = Number(
