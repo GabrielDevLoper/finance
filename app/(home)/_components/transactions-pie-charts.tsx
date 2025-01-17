@@ -6,7 +6,6 @@ import { Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/app/_components/ui/card";
@@ -19,12 +18,15 @@ import {
 import { TipoTransacao } from "@prisma/client";
 import { TransactionPercentagePerType } from "@/app/_data/get-dashboard/types";
 import PercentageItem from "./percentage-item";
+import { MONTHS_OPTIONS_LABEL } from "@/app/_constants/utils";
 
 interface TransactionsPieChartProps {
   investimentosTotal: number;
   depositosTotal: number;
   despesasTotal: number;
   tiposPorcentagem: TransactionPercentagePerType;
+  month: string;
+  year: string;
 }
 
 const chartConfig = {
@@ -47,6 +49,8 @@ export function TransactionsPieChart({
   despesasTotal,
   investimentosTotal,
   tiposPorcentagem,
+  month,
+  year,
 }: TransactionsPieChartProps) {
   const chartData = [
     {
@@ -69,8 +73,9 @@ export function TransactionsPieChart({
   return (
     <Card className="flex flex-col p-12">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>
+          {MONTHS_OPTIONS_LABEL[month]} - {year}
+        </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
