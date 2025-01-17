@@ -93,62 +93,64 @@ export default function FiterT({ onFilterChange }: FilterTransactionProps) {
             <FilterIcon />
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Filtro</DialogTitle>
           </DialogHeader>
 
-          <Select onValueChange={setSelectStatus}>
-            <SelectTrigger className="rounded-full">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              {TRANSACTION_STATUS_OPTIONS.map((status) => (
-                <SelectItem key={status.value} value={status.value}>
-                  {status.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="grid grid-cols-2 gap-4">
+            <Select onValueChange={setSelectStatus}>
+              <SelectTrigger className="rounded-full">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                {TRANSACTION_STATUS_OPTIONS.map((status) => (
+                  <SelectItem key={status.value} value={status.value}>
+                    {status.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Select onValueChange={setSelectType}>
-            <SelectTrigger className="rounded-full">
-              <SelectValue placeholder="Tipo" />
-            </SelectTrigger>
-            <SelectContent>
-              {TRANSACTION_TYPE_OPTIONS.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Select onValueChange={setSelectType}>
+              <SelectTrigger className="rounded-full">
+                <SelectValue placeholder="Tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                {TRANSACTION_TYPE_OPTIONS.map((type) => (
+                  <SelectItem key={type.value} value={type.value}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Select onValueChange={setMonth}>
-            <SelectTrigger className="rounded-full">
-              <SelectValue placeholder="Mês" />
-            </SelectTrigger>
-            <SelectContent>
-              {MONTH_OPTIONS.map((month) => (
-                <SelectItem key={month.value} value={month.value}>
-                  {month.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select onValueChange={setYear}>
-            <SelectTrigger className="rounded-full">
-              <SelectValue placeholder="Ano" />
-            </SelectTrigger>
-            <SelectContent>
-              {YEARS_OPTIONS.map((year) => (
-                <SelectItem key={year.value} value={year.value}>
-                  {year.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
+            <Select onValueChange={setMonth}>
+              <SelectTrigger className="rounded-full">
+                <SelectValue placeholder="Mês" />
+              </SelectTrigger>
+              <SelectContent>
+                {MONTH_OPTIONS.map((month) => (
+                  <SelectItem key={month.value} value={month.value}>
+                    {month.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select onValueChange={setYear}>
+              <SelectTrigger className="rounded-full">
+                <SelectValue placeholder="Ano" />
+              </SelectTrigger>
+              <SelectContent>
+                {YEARS_OPTIONS.map((year) => (
+                  <SelectItem key={year.value} value={year.value}>
+                    {year.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <DialogFooter>
             <Button onClick={handleFilter}>Buscar</Button>
           </DialogFooter>
