@@ -1,6 +1,9 @@
 import { db } from "@/app/_lib/prisma";
 import { TipoTransacao } from "@prisma/client";
-import { TransactionPercentagePerType } from "./types";
+import {
+  TotalDespesaPorCategoria,
+  TransactionPercentagePerType,
+} from "./types";
 
 type GetDashboardProps = {
   ano: string;
@@ -64,6 +67,31 @@ export const getDashboard = async ({ ano, mes }: GetDashboardProps) => {
     ),
   };
 
+  const totalDespesaPorCategoria: TotalDespesaPorCategoria[] = (
+    await db.transacoes.groupBy({
+      by: ["categoria"],
+      where: {
+        ...where,
+        tipo: TipoTransacao.DESPESA,
+      },
+      _sum: {
+        valor: true,
+      },
+    })
+  ).map((categoria) => ({
+    categoria: categoria.categoria,
+    totalValor: Number(categoria._sum.valor),
+    porcentagemPorTotal: Math.round(
+      (Number(categoria._sum.valor) / Number(despesasTotal)) * 100
+    ),
+  }));
+
+  const ultimasTransacoes = await db.transacoes.findMany({
+    where,
+    orderBy: { createdAt: "desc" },
+    take: 15,
+  });
+
   return {
     investimentosTotal,
     despesasTotal,
@@ -72,5 +100,7 @@ export const getDashboard = async ({ ano, mes }: GetDashboardProps) => {
     month: mes,
     year: ano,
     tiposPorcentagem,
+    totalDespesaPorCategoria,
+    ultimasTransacoes,
   };
 };
