@@ -3,7 +3,7 @@ import Navbar from "../_components/navbar";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader } from "../_components/ui/card";
 import { CheckIcon, XIcon } from "lucide-react";
-import { Button } from "../_components/ui/button";
+import AcquirePlanButton from "./_components/acquire_plan_button";
 
 const Subscription = async () => {
   const { userId } = await auth();
@@ -60,9 +60,8 @@ const Subscription = async () => {
                 <CheckIcon className="text-primary" />
                 <p>Relatórios de IA</p>
               </div>
-              <Button className="rounded-full w-full font-bold">
-                Adquirir plano
-              </Button>
+
+              <AcquirePlanButton />
             </CardContent>
           </Card>
         </div>
