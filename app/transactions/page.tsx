@@ -7,6 +7,8 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { MONTHS_OPTIONS_LABEL } from "../_constants/utils";
 import FilterTransaction from "./_components/filter-transaction";
+import { getCurrentMonthTransactions } from "../_data/get-current-month-transactions";
+import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 
 interface TransactionsProps {
   searchParams: {
@@ -39,6 +41,8 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
     },
   });
 
+  const canUserAddTransactions = await canUserAddTransaction();
+
   return (
     <>
       <Navbar />
@@ -48,7 +52,9 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
             Transações de {MONTHS_OPTIONS_LABEL[month] ?? ""} de {year}
           </h1>
           <FilterTransaction />
-          <AddTransactionButton />
+          <AddTransactionButton
+            userCanAddTransaction={canUserAddTransactions}
+          />
         </div>
         <DataTable columns={transactionsColumns} data={transactions} />
       </div>
