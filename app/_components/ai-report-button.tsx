@@ -1,6 +1,6 @@
 "use client";
 
-import { BotIcon, Loader2Icon } from "lucide-react";
+import { BotIcon, Loader2Icon, PrinterIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -45,6 +45,22 @@ const AiReportButton = ({
     }
   };
 
+  const handlePrintReportClick = () => {
+    const printContent = document.getElementById("printable-report");
+    const WindowPrint = window.open("", "", "width=900,height=650");
+
+    if (report && WindowPrint && printContent) {
+      WindowPrint.document.write(
+        "<html><head><title>Relatório</title></head><body>"
+      );
+      WindowPrint.document.write(printContent.innerHTML);
+      WindowPrint.document.write("</body></html>");
+      WindowPrint.document.close();
+      WindowPrint.focus();
+      WindowPrint.print();
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -65,7 +81,9 @@ const AiReportButton = ({
               </DialogDescription>
             </DialogHeader>
             <ScrollArea className="prose max-h-[450px] text-white prose-h3:text-white prose-h4:text-white prose-strong:text-white">
-              <Markdown>{report}</Markdown>
+              <div id="printable-report">
+                <Markdown>{report}</Markdown>
+              </div>
             </ScrollArea>
             <DialogFooter>
               <DialogClose asChild>
@@ -78,6 +96,14 @@ const AiReportButton = ({
                 {reportIsLoading && <Loader2Icon className="animate-spin" />}
                 Gerar relatório
               </Button>
+              <Button
+                onClick={handlePrintReportClick}
+                disabled={!report}
+                variant={"ghost"}
+              >
+                <PrinterIcon className="mr-2" />
+                Imprimir relatório
+              </Button>
             </DialogFooter>
           </>
         ) : (
@@ -86,7 +112,7 @@ const AiReportButton = ({
               <DialogTitle>Relatório IA</DialogTitle>
 
               <DialogDescription>
-                Você precisa de um plano premium para gerar relatorios com IA.
+                Você precisa de um plano premium para gerar relatórios com IA.
               </DialogDescription>
             </DialogHeader>
 
