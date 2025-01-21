@@ -29,6 +29,12 @@ const ExpensePerCategory = ({
               </p>
             </div>
             <Progress value={categoria.porcentagemPorTotal} />
+            <p className="text-xs font-bold">
+              {Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+              }).format(categoria.totalValor)}
+            </p>
           </div>
         ))}
       </CardContent>
