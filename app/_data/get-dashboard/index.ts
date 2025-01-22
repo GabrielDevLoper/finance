@@ -110,6 +110,6 @@ export const getDashboard = async ({ ano, mes }: GetDashboardProps) => {
     year: ano,
     tiposPorcentagem,
     totalDespesaPorCategoria,
-    ultimasTransacoes,
+    ultimasTransacoes: JSON.parse(JSON.stringify(ultimasTransacoes)),
   };
 };

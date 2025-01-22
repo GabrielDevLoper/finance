@@ -56,7 +56,10 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
             userCanAddTransaction={canUserAddTransactions}
           />
         </div>
-        <DataTable columns={transactionsColumns} data={transactions} />
+        <DataTable
+          columns={transactionsColumns}
+          data={JSON.parse(JSON.stringify(transactions))}
+        />
       </div>
     </>
   );
