@@ -114,9 +114,12 @@ const UpserTransactionDialog = ({
       setUpsertTransactionIsLoading(true);
       await upsertTransaction({ ...data, id: transactionId });
       setIsOpen(false);
-      toast.success("Transação adicionada com sucesso ✔️", {
-        className: "bg-[#55B02E] text-white border-none",
-      });
+      toast.success(
+        `Transação ${isUpdate ? "alterada" : "adicionada"} com sucesso ✔️`,
+        {
+          className: "bg-[#55B02E] text-white border-none",
+        }
+      );
       setUpsertTransactionIsLoading(false);
       form.reset();
     } catch (error) {
