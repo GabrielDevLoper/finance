@@ -9,6 +9,7 @@ import { getDashboard } from "../_data/get-dashboard";
 import ExpensePerCategory from "./_components/expense-per-category";
 import LastTransactions from "./_components/last-transactions";
 import AiReportButton from "../_components/ai-report-button";
+import { SwitchTheme } from "../_components/swith-theme";
 
 interface HomeProps {
   searchParams: {
@@ -47,6 +48,7 @@ export default async function Home({
         <div className="flex justify-between">
           <h1 className="font-bold text-2xl">Dashboard</h1>
           <div className="flex  items-center gap-3">
+            <SwitchTheme />
             <AiReportButton
               month={month}
               year={year}

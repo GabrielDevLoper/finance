@@ -19,7 +19,13 @@ const SummaryCard = async ({
   const canUserAddTransactions = await canUserAddTransaction();
 
   return (
-    <Card className={`${size === "large" ? "bg-white bg-opacity-5" : ""}`}>
+    <Card
+      className={`${
+        size === "large"
+          ? "dark:bg-white dark:bg-opacity-5 bg-black bg-opacity-5"
+          : ""
+      }`}
+    >
       <CardHeader className="flex-row items-center gap-4">
         {icon}
         <p

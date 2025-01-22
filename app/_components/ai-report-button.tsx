@@ -17,6 +17,7 @@ import { useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import Markdown from "react-markdown";
 import Link from "next/link";
+import { toast } from "sonner";
 
 interface AiReportButtonProps {
   month: string;
@@ -36,7 +37,9 @@ const AiReportButton = ({
     try {
       setReportIsLoading(true);
       const aiReport = await generateAiReport({ month, year });
-
+      toast.success("Relatório da IA gerado com sucesso ✔️", {
+        className: "bg-[#55B02E] text-white border-none",
+      });
       setReport(aiReport);
     } catch (error) {
       console.log(error);

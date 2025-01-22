@@ -44,10 +44,12 @@ import {
 import { DatePicker } from "./ui/date-picker";
 import { Textarea } from "./ui/textarea";
 import { upsertTransaction } from "../_actions/add-transaction";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MONTH_OPTIONS, YEARS_OPTIONS } from "../_constants/utils";
 import { format } from "date-fns";
-import { useToast } from "../_hooks/use-toast";
+
+import { Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -82,7 +84,8 @@ const UpserTransactionDialog = ({
   defaultValues,
   transactionId,
 }: UpsertTransactionDialogProps) => {
-  const { toast } = useToast();
+  const [upsertTransactionIsLoading, setUpsertTransactionIsLoading] =
+    useState(false);
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -108,14 +111,13 @@ const UpserTransactionDialog = ({
   const isUpdate = Boolean(transactionId);
   async function onSubmit(data: FormSchema) {
     try {
+      setUpsertTransactionIsLoading(true);
       await upsertTransaction({ ...data, id: transactionId });
       setIsOpen(false);
-      toast({
-        title: "Transação adicionada com sucesso ✔️",
-        description: "Agora você poderá ver suas transações.",
-        className: "bg-primary text-white font-bold text-4xl", // Estilizar como sucesso
-        duration: 2000, // Tempo que o toast ficará visível
+      toast.success("Transação adicionada com sucesso ✔️", {
+        className: "bg-[#55B02E] text-white border-none",
       });
+      setUpsertTransactionIsLoading(false);
       form.reset();
     } catch (error) {
       console.error(error);
@@ -369,7 +371,10 @@ const UpserTransactionDialog = ({
                 </Button>
               </DialogClose>
 
-              <Button type="submit">
+              <Button type="submit" disabled={upsertTransactionIsLoading}>
+                {upsertTransactionIsLoading && (
+                  <Loader2Icon className="animate-spin" />
+                )}
                 {isUpdate ? "Atualizar" : "Adicionar"}
               </Button>
             </DialogFooter>
