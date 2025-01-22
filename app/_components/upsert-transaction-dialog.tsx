@@ -67,7 +67,6 @@ const formSchema = z.object({
   categoria: z.nativeEnum(CategoriaTransacao, {
     required_error: "A categoria é obrigatório",
   }),
-
   status: z.nativeEnum(StatusTransacao).optional(),
   observacao: z.string().nullable().optional(),
   data_pagamento: z.date().nullable().optional(),

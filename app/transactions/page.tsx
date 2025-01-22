@@ -7,15 +7,15 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { MONTHS_OPTIONS_LABEL } from "../_constants/utils";
 import FilterTransaction from "./_components/filter-transaction";
-import { getCurrentMonthTransactions } from "../_data/get-current-month-transactions";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
+import { StatusTransacao, TipoTransacao } from "@prisma/client";
 
 interface TransactionsProps {
   searchParams: {
-    month?: string;
-    year?: string;
-    status?: string;
-    type?: string;
+    month: string;
+    year: string;
+    status: string;
+    type: string;
   };
 }
 
@@ -33,8 +33,8 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
       id_usuario: userId,
       ...(month && { mes: month }),
       ...(year && { ano: year }),
-      ...(status && { status }), // Adicionando o filtro por categoria, se presente
-      ...(tipo && { tipo }), // Adicionando o filtro por categoria, se presente
+      ...(status && { status: status as StatusTransacao }),
+      ...(tipo && { tipo: tipo as TipoTransacao }),
     },
     orderBy: {
       createdAt: "desc", // ou 'createdAt', dependendo do campo que você usa
@@ -49,7 +49,7 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
       <div className="p-6 space-y-6">
         <div className="flex w-full justify-between items-center">
           <h1 className="font-bold text-2xl">
-            Transações de {MONTHS_OPTIONS_LABEL[month] ?? ""} de {year}
+            Transações de {MONTHS_OPTIONS_LABEL.get(month) ?? ""} de {year}
           </h1>
           <FilterTransaction />
           <AddTransactionButton
