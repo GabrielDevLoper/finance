@@ -1,4 +1,3 @@
-import { db } from "../_lib/prisma";
 import { DataTable } from "../_components/ui/data-table";
 import { transactionsColumns } from "./_columns";
 import AddTransactionButton from "../_components/add-transaction-button";
@@ -8,16 +7,13 @@ import { redirect } from "next/navigation";
 import { MONTHS_OPTIONS_LABEL } from "../_constants/utils";
 import FilterTransaction from "./_components/filter-transaction";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
-import { StatusTransacao, TipoTransacao } from "@prisma/client";
+import { Suspense } from "react";
 
-interface TransactionsProps {
-  searchParams: {
-    month: string;
-    year: string;
-    status: string;
-    type: string;
-  };
-}
+import Loading from "../_components/loading";
+import {
+  fetchTransactions,
+  TransactionsProps,
+} from "./_actions/get-transactions";
 
 const Transactions = async ({ searchParams }: TransactionsProps) => {
   const { userId } = await auth();
@@ -26,20 +22,7 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
     redirect("/login");
   }
 
-  const { month, year, status, type: tipo } = searchParams;
-
-  const transactions = await db.transacoes.findMany({
-    where: {
-      id_usuario: userId,
-      ...(month && { mes: month }),
-      ...(year && { ano: year }),
-      ...(status && { status: status as StatusTransacao }),
-      ...(tipo && { tipo: tipo as TipoTransacao }),
-    },
-    orderBy: {
-      createdAt: "desc", // ou 'createdAt', dependendo do campo que você usa
-    },
-  });
+  const transactions = await fetchTransactions(searchParams, userId);
 
   const canUserAddTransactions = await canUserAddTransaction();
 
@@ -49,7 +32,8 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
       <div className="p-6 space-y-6">
         <div className="flex w-full justify-between items-center">
           <h1 className="font-bold text-2xl">
-            Transações de {MONTHS_OPTIONS_LABEL.get(month) ?? ""} de {year}
+            Transações de {MONTHS_OPTIONS_LABEL.get(searchParams.month) ?? ""}{" "}
+            de {searchParams.year}
           </h1>
           <FilterTransaction />
           <AddTransactionButton
@@ -61,8 +45,34 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
           data={JSON.parse(JSON.stringify(transactions))}
         />
       </div>
+
+      {/* <div className="p-6 space-y-6">
+      <div className="flex w-full justify-between items-center">
+        <Skeleton className="h-8 w-1/3 rounded" /> 
+        <div className="flex space-x-4">
+          <Skeleton className="h-10 w-32 rounded" /> 
+          <Skeleton className="h-10 w-40 rounded" />
+        </div>
+      </div>
+
+    
+      <div className="space-y-4">
+        <Skeleton className="h-10 w-full rounded" /> 
+        <div className="space-y-2">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Skeleton key={index} className="h-8 w-full rounded" /> 
+          ))}
+        </div>
+      </div>
+    </div> */}
     </>
   );
 };
 
-export default Transactions;
+export default function TransactionsPage(props: TransactionsProps) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Transactions {...props} />
+    </Suspense>
+  );
+}

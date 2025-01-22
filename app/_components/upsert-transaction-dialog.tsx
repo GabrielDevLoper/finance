@@ -374,7 +374,11 @@ const UpserTransactionDialog = ({
                 </Button>
               </DialogClose>
 
-              <Button type="submit" disabled={upsertTransactionIsLoading}>
+              <Button
+                className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
+                type="submit"
+                disabled={upsertTransactionIsLoading}
+              >
                 {upsertTransactionIsLoading && (
                   <Loader2Icon className="animate-spin" />
                 )}

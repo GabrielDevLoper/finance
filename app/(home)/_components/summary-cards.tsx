@@ -51,6 +51,14 @@ const SummaryCards = async ({
         />
       </div>
     </div>
+    // <div className="space-y-6">
+    //   <Skeleton className="h-[125px] w-full rounded-xl" />
+    //   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    //     <Skeleton className="h-[125px] w-full rounded-xl" />
+    //     <Skeleton className="h-[125px] w-full rounded-xl" />
+    //     <Skeleton className="h-[125px] w-full rounded-xl" />
+    //   </div>
+    // </div>
   );
 };
 
