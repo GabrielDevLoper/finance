@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { SwitchTheme } from "./swith-theme";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -123,7 +124,10 @@ const Navbar = () => {
         </div>
       </div>
 
-      <UserButton showName />
+      <div>
+        <SwitchTheme />
+        <UserButton showName />
+      </div>
     </nav>
   );
 };

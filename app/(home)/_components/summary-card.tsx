@@ -40,7 +40,11 @@ const SummaryCard = async ({
 
       <CardContent className="flex justify-between">
         <p
-          className={`font-bold ${size === "small" ? "text-2xl" : "text-4xl"}`}
+          className={`font-bold ${
+            size === "small"
+              ? "lg:text-2xl sm:text-xl"
+              : "lg:text-4xl sm:text-2xl"
+          }`}
         >
           {Intl.NumberFormat("pt-BR", {
             style: "currency",
@@ -49,9 +53,11 @@ const SummaryCard = async ({
         </p>
 
         {size === "large" && (
-          <AddTransactionButton
-            userCanAddTransaction={canUserAddTransactions}
-          />
+          <div className="sm:mt-4 lg:mt-0">
+            <AddTransactionButton
+              userCanAddTransaction={canUserAddTransactions}
+            />
+          </div>
         )}
       </CardContent>
     </Card>
