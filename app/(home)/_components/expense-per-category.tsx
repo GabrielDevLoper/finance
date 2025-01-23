@@ -12,7 +12,7 @@ const ExpensePerCategory = ({
   expensesPerCategory,
 }: ExpensePerCategoryProps) => {
   return (
-    <ScrollArea className="col-span-2 rounded-md border pb-6 h-full">
+    <ScrollArea className="col-span-2 rounded-md border pb-6 h-full bg-black bg-opacity-5">
       <CardHeader>
         <CardTitle className="font-bold">Despesas por categoria</CardTitle>
       </CardHeader>
@@ -31,8 +31,8 @@ const ExpensePerCategory = ({
             <Progress value={categoria.porcentagemPorTotal} />
             <p className="text-xs font-bold">
               {Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
+                style: "currency",
+                currency: "BRL",
               }).format(categoria.totalValor)}
             </p>
           </div>

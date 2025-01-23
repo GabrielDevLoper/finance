@@ -71,13 +71,13 @@ export function TransactionsPieChart({
   ];
 
   return (
-    <Card className="flex flex-col p-12">
+    <Card className="flex flex-col p-12 bg-black bg-opacity-5">
       <CardHeader className="items-center pb-0">
         <CardTitle>
           {MONTHS_OPTIONS_LABEL.get(month)} - {year}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex-1 pb-0 ">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"

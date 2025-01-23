@@ -24,14 +24,14 @@ const SummaryCard = async ({
       className={`${
         size === "large"
           ? "dark:bg-white dark:bg-opacity-5 bg-black bg-opacity-5"
-          : ""
+          : "bg-black bg-opacity-5"
       }`}
     >
       <CardHeader className="flex-row items-center gap-4">
         {icon}
         <p
           className={`${
-            size === "small" ? "text-muted-foreground" : "text-white opacity-70"
+            size === "small" ? "text-muted-foreground" : "opacity-70"
           }`}
         >
           {title}
