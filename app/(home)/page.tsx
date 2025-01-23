@@ -46,11 +46,18 @@ export default async function Home({
               <div className="flex flex-col gap-6 overflow-hidden">
                 <SummaryCards {...dashboardData} />
 
-                <div className="grid h-full grid-rows-1 gap-6 overflow-hidden sm:grid-cols-1 lg:grid-cols-3 md:grid-cols-2 md:grid-rows-1 min-h-[200px]">
-                  <TransactionsPieChart {...dashboardData} />
-                  <ExpensePerCategory
-                    expensesPerCategory={dashboardData.totalDespesaPorCategoria}
-                  />
+                {/* Adaptação responsiva para os gráficos */}
+                <div className="grid h-full gap-6 overflow-hidden sm:grid-cols-1 md:grid-cols-1 md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-1 min-h-[200px]">
+                  <div className="md:row-span-1 lg:col-span-1">
+                    <TransactionsPieChart {...dashboardData} />
+                  </div>
+                  <div className="md:row-span-1 lg:col-span-2">
+                    <ExpensePerCategory
+                      expensesPerCategory={
+                        dashboardData.totalDespesaPorCategoria
+                      }
+                    />
+                  </div>
                 </div>
               </div>
             </ScrollArea>
