@@ -28,7 +28,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
     return "-";
   };
   return (
-    <ScrollArea className="rounded-md border">
+    <ScrollArea className="rounded-md border hidden md:block">
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle className="font-bold sm:text-xl">
           Últimas transações
