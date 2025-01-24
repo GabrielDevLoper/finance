@@ -24,7 +24,7 @@ const Login = async () => {
         />
 
         <h1 className="text-4xl font-bold mb-3">Bem-vindo</h1>
-        <p className="text-muted-foreground ">
+        <p className="text-muted-foreground mb-6">
           A Finance AI é uma plataforma de gestão financeira que utiliza IA para
           monitorar suas movimentações, e oferecer insights personalizados,
           facilitando o controle do seu orçamento.
@@ -36,7 +36,7 @@ const Login = async () => {
           </Button>
         </SignInButton>
       </div>
-      <div className="relative h-full w-full">
+      <div className="relative h-full w-full hidden sm:block">
         <Image src={"/login.png"} alt="login" fill className="object-cover" />
       </div>
     </div>
