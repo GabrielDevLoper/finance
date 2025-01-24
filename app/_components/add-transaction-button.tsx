@@ -26,7 +26,7 @@ const AddTransactionButton = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              className="rounded-full font-bold text-xs sm:text-sm md:text-base px-3 py-2 sm:px-4 sm:py-3 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300"
+              className="rounded-full text-xs sm:text-sm md:text-base px-3 py-2 sm:px-4 sm:py-3"
               onClick={() => setDialogIsOpen(true)}
               disabled={!userCanAddTransaction}
             >

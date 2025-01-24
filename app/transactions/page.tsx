@@ -30,41 +30,21 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
     <>
       <Navbar />
       <div className="p-6 space-y-6">
-        <div className="flex w-full justify-between items-center">
+        <div className="flex w-full items-center">
           <h1 className="font-bold text-2xl">
             Transações de {MONTHS_OPTIONS_LABEL.get(searchParams.month) ?? ""}{" "}
             de {searchParams.year}
           </h1>
-          <FilterTransaction />
-          <AddTransactionButton
-            userCanAddTransaction={canUserAddTransactions}
-          />
-        </div>
+          <div className="flex ml-auto items-center space-x-4">
+            <FilterTransaction />
+            <AddTransactionButton userCanAddTransaction={canUserAddTransactions} />
+          </div>
+        </div>    
         <DataTable
           columns={transactionsColumns}
           data={JSON.parse(JSON.stringify(transactions))}
         />
       </div>
-
-      {/* <div className="p-6 space-y-6">
-      <div className="flex w-full justify-between items-center">
-        <Skeleton className="h-8 w-1/3 rounded" /> 
-        <div className="flex space-x-4">
-          <Skeleton className="h-10 w-32 rounded" /> 
-          <Skeleton className="h-10 w-40 rounded" />
-        </div>
-      </div>
-
-    
-      <div className="space-y-4">
-        <Skeleton className="h-10 w-full rounded" /> 
-        <div className="space-y-2">
-          {Array.from({ length: 8 }).map((_, index) => (
-            <Skeleton key={index} className="h-8 w-full rounded" /> 
-          ))}
-        </div>
-      </div>
-    </div> */}
     </>
   );
 };

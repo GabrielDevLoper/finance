@@ -80,12 +80,7 @@ export default function FiterT({ onFilterChange }: FilterTransactionProps) {
 
   return (
     <>
-      <Button
-        className="rounded-lg bg-cyan-700 hover:bg-cyan-800"
-        onClick={clearFilters}
-      >
-        Limpar Filtros
-      </Button>
+      
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
@@ -152,8 +147,16 @@ export default function FiterT({ onFilterChange }: FilterTransactionProps) {
             </Select>
           </div>
           <DialogFooter>
-            <Button onClick={handleFilter}>Buscar</Button>
+            
+            <Button
+        className="rounded-lg bg-cyan-700 hover:bg-cyan-800"
+        onClick={clearFilters}
+      >
+        Limpar Filtros
+      </Button>
+      <Button onClick={handleFilter}>Buscar</Button>
           </DialogFooter>
+          
         </DialogContent>
       </Dialog>
     </>
