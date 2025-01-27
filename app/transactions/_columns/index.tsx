@@ -65,6 +65,15 @@ export const transactionsColumns: ColumnDef<Transacoes>[] = [
         );
       }
 
+      if (transaction.status === "RECEBIDO") {
+        return (
+          <Badge className="bg-muted text-primary hover:bg-muted font-bold">
+            <CircleIcon className="fill-primary mr-2" size={10} />
+            Recebido
+          </Badge>
+        );
+      }
+
       return (
         <Badge className="bg-muted text-yellow-300 hover:bg-muted font-bold">
           <CircleIcon className="fill-yellow-300 mr-2" size={10} />

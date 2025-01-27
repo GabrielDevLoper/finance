@@ -28,6 +28,10 @@ export const TRANSACTION_STATUS_OPTIONS = [
     value: StatusTransacao.PENDENTE,
     label: "Pendente",
   },
+  {
+    value: StatusTransacao.RECEBIDO,
+    label: "Recebido",
+  },
 ];
 
 export const TRANSACTION_CATEGORY_LABELS = {
