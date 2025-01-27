@@ -12,12 +12,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { generateAiReport } from "../(home)/_actions/generate-ai-report";
+// import { generateAiReport } from "../(home)/_actions/generate-ai-report-with-chatgpt";
 import { useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import Markdown from "react-markdown";
 import Link from "next/link";
 import { toast } from "sonner";
+import { generateAiReportWithDeepSeek } from "../(home)/_actions/generate-ai-report-with-deepseek";
 
 interface AiReportButtonProps {
   month: string;
@@ -36,7 +37,7 @@ const AiReportButton = ({
   const handleGenerateReportClick = async () => {
     try {
       setReportIsLoading(true);
-      const aiReport = await generateAiReport({ month, year });
+      const aiReport = await generateAiReportWithDeepSeek({ month, year });
       toast.success("Relatório da IA gerado com sucesso ✔️", {
         className: "bg-[#55B02E] text-white border-none",
       });
