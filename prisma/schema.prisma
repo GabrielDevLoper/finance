@@ -31,6 +31,29 @@ model Transacoes {
   @@map("transacoes")
 }
 
+model UsoApiRelatorios {
+  id                  String   @id @default(uuid())
+  id_usuario          String
+  quantidade_chamadas Int      @default(0)
+  ia_descricao        String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("uso_api_relatorios")
+}
+
+model RelatoriosMensais {
+  id         String   @id @default(uuid())
+  id_usuario String
+  conteudo   String // Campo para armazenar textos longos
+  ano        String
+  mes        String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("relatorios_mensais")
+}
+
 enum StatusTransacao {
   PAGO
   PENDENTE

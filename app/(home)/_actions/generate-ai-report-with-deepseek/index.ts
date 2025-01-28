@@ -3,6 +3,7 @@
 import { db } from "@/app/_lib/prisma";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import OpenAI from "openai";
+import { verificarUsoApi } from "../verify-call-api-ai";
 
 type GenerateAirReportType = {
   month: string;
@@ -23,6 +24,10 @@ export const generateAiReportWithDeepSeek = async ({
 
   if (!userId) {
     throw new Error("Unauthorization");
+  }
+
+  if (await verificarUsoApi(userId, "deepseek")) {
+    throw new Error("Limite de chamadas atingido para este mês.");
   }
 
   const user = await clerkClient().users.getUser(userId);
@@ -70,6 +75,23 @@ export const generateAiReportWithDeepSeek = async ({
         content,
       },
     ],
+  });
+
+  await db.usoApiRelatorios.create({
+    data: {
+      id_usuario: userId,
+      ia_descricao: "deepseek",
+      quantidade_chamadas: 1,
+    },
+  });
+
+  await db.relatoriosMensais.create({
+    data: {
+      id_usuario: userId,
+      mes: month,
+      ano: year,
+      conteudo: completion.choices[0].message.content || "",
+    },
   });
 
   return completion.choices[0].message.content;
