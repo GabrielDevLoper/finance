@@ -78,4 +78,5 @@ enum CategoriaTransacao {
   FINANCEIRO
   FREELANCER
   FATURA_CARTAO_CREDITO
+  SERVICOS
 }
