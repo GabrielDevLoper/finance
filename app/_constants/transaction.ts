@@ -98,4 +98,8 @@ export const TRANSACTION_CATEGORY_OPTIONS = [
     value: CategoriaTransacao.TRANSPORTE,
     label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.TRANSPORTE],
   },
+  {
+    value: CategoriaTransacao.SERVICOS,
+    label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.SERVICOS],
+  },
 ];
