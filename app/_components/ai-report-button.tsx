@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 // import { generateAiReport } from "../(home)/_actions/generate-ai-report-with-chatgpt";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import Markdown from "react-markdown";
 import Link from "next/link";
@@ -83,45 +83,32 @@ const AiReportButton = ({
     }
   };
 
-  // Função para carregar o relatório
-  const loadReport = async () => {
+  const loadReport = useCallback(async () => {
     try {
       setReportIsLoading(true);
-
-      // Busca os relatórios mensais do banco de dados
       const relatorios = await getRelatoriosMensais(month, year);
 
       if (relatorios?.conteudo) {
-        // Converte os relatórios para um formato de texto (ou Markdown)
-
-        // Atualiza o estado com o relatório gerado
         setReport(relatorios.conteudo);
       } else {
-        // Se não houver relatórios, define o estado como null
         setReport(null);
       }
     } catch (error) {
       console.error("Erro ao carregar relatório:", error);
-
-      // Toast de erro
       toast.error(
         error instanceof Error
           ? error.message
           : "Ocorreu um erro ao carregar o relatório.",
-        {
-          className: "bg-red-500 text-white border-none",
-        }
+        { className: "bg-red-500 text-white border-none" }
       );
     } finally {
-      // Finaliza o estado de carregamento
       setReportIsLoading(false);
     }
-  };
+  }, [month, year]); // Dependências do useCallback
 
-  // Carrega o relatório automaticamente quando o componente é montado
   useEffect(() => {
     loadReport();
-  }, [month, year]); // Executa novamente se o mês ou ano mudar
+  }, [loadReport]); // Agora o useEffect depende do useCallback, que já tem as dependências corretas
 
   return (
     <Dialog>
