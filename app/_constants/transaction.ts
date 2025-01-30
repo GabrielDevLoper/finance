@@ -46,6 +46,7 @@ export const TRANSACTION_CATEGORY_LABELS = {
   [CategoriaTransacao.SALARIO]: "Salário",
   [CategoriaTransacao.SAUDE]: "Saúde",
   [CategoriaTransacao.TRANSPORTE]: "Transporte",
+  [CategoriaTransacao.SERVICOS]: "Serviços",
 };
 
 export const TRANSACTION_CATEGORY_OPTIONS = [

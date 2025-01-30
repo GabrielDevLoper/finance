@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-// import { generateAiReport } from "../(home)/_actions/generate-ai-report-with-chatgpt";
 import { useEffect, useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import Markdown from "react-markdown";
