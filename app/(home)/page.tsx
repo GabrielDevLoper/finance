@@ -8,7 +8,6 @@ import AiReportButton from "../_components/ai-report-button";
 import { fetchDashboardData } from "./_actions/fetch-dashboard-data";
 import { Suspense } from "react";
 import Loading from "../_components/loading";
-import { ScrollArea } from "../_components/ui/scroll-area";
 
 interface HomeProps {
   searchParams: {
@@ -26,9 +25,10 @@ export default async function Home({
     <>
       <Navbar />
       <Suspense fallback={<Loading />}>
-        <div className="flex h-full flex-col space-y-6 overflow-hidden p-6">
-          <div className="flex justify-between">
-            <h1 className="font-bold text-2xl hidden md:block">Dashboard</h1>
+        <div className="flex h-full flex-col space-y-6 p-6">
+          {/* Cabeçalho */}
+          <div className="flex flex-col md:flex-row justify-between gap-4">
+            <h1 className="font-bold text-2xl">Dashboard</h1>
             <div className="flex flex-row items-center gap-3">
               <AiReportButton
                 month={month}
@@ -41,26 +41,32 @@ export default async function Home({
             </div>
           </div>
 
-          <div className="grid h-full grid-cols-1 lg:grid-cols-[2fr,1fr] gap-6 overflow-hidden">
-            <ScrollArea>
-              <div className="flex flex-col gap-6 overflow-hidden">
-                <SummaryCards {...dashboardData} />
+          {/* Conteúdo Principal */}
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr,1fr] gap-6">
+            {/* Coluna da Esquerda (Cards de Resumo e Gráficos) */}
+            <div className="flex flex-col gap-6">
+              {/* Cards de Resumo */}
+              <SummaryCards {...dashboardData} />
 
-                {/* Adaptação responsiva para os gráficos */}
-                <div className="grid h-full gap-6 overflow-hidden sm:grid-cols-1 md:grid-cols-1 md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-1 min-h-[200px]">
-                  <div className="md:row-span-1 lg:col-span-1">
-                    <TransactionsPieChart {...dashboardData} />
-                  </div>
-                  <div className="md:row-span-1 lg:col-span-2">
-                    <ExpensePerCategory
-                      expensesPerCategory={
-                        dashboardData.totalDespesaPorCategoria
-                      }
-                    />
-                  </div>
+              {/* Gráficos */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Gráfico de Pizza */}
+                <div className="md:col-span-1 ">
+                  <TransactionsPieChart {...dashboardData} />
+                </div>
+
+                {/* Gráfico de Despesas por Categoria */}
+                <div className="md:col-span-1 max-h-[472px]">
+                  {" "}
+                  {/* Altura máxima */}
+                  <ExpensePerCategory
+                    expensesPerCategory={dashboardData.totalDespesaPorCategoria}
+                  />
                 </div>
               </div>
-            </ScrollArea>
+            </div>
+
+            {/* Coluna da Direita (Últimas Transações com Scroll) */}
 
             <LastTransactions
               lastTransactions={dashboardData.ultimasTransacoes}

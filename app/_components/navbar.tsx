@@ -61,14 +61,15 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-4">
+        <SwitchTheme />
+        <UserButton showName />
+
         {/* Botão do Drawer para telas mobile com margem à direita */}
-        <div className="mr-24">
+        <div className="ml-24">
           {" "}
           {/* Adicionando margem à direita */}
           <MobileDrawer />
         </div>
-        <SwitchTheme />
-        <UserButton showName />
       </div>
     </nav>
   );

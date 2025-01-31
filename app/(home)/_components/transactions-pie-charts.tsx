@@ -71,7 +71,7 @@ export function TransactionsPieChart({
   ];
 
   return (
-    <Card className="flex flex-col p-12 bg-black bg-opacity-5">
+    <Card className="flex flex-col p-12 bg-black bg-opacity-5 max-h-[500px]">
       <CardHeader className="items-center pb-0">
         <CardTitle>
           {MONTHS_OPTIONS_LABEL.get(month)} - {year}
