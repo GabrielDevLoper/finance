@@ -25,8 +25,13 @@ const Subscription = async () => {
       <Navbar />
       <div className="p-6 space-y-6">
         <h1 className="font-bold text-2xl">Assinatura</h1>
-        <div className="flex gap-6">
-          <Card className="w-[450px]">
+        <div className="flex flex-col md:flex-row gap-6">
+          {" "}
+          {/* Responsividade aqui */}
+          {/* Card do Plano Básico */}
+          <Card className="w-full md:w-[450px]">
+            {" "}
+            {/* Largura responsiva */}
             <CardHeader className="border-b border-solid py-8">
               <h2 className="text-center text-2xl font-semibold">
                 Plano básico
@@ -51,7 +56,10 @@ const Subscription = async () => {
               </div>
             </CardContent>
           </Card>
-          <Card className="w-[450px]">
+          {/* Card do Plano Premium */}
+          <Card className="w-full md:w-[450px]">
+            {" "}
+            {/* Largura responsiva */}
             <CardHeader className="border-b border-solid py-8 relative">
               {hasPremiumPlan && (
                 <Badge className="absolute left-4 top-12 bg-primary/10 text-primary">
