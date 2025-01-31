@@ -5,18 +5,14 @@ import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { SwitchTheme } from "./swith-theme";
+import MobileDrawer from "./mobile-drawer-navbar";
 
 const Navbar = () => {
   const pathname = usePathname();
   const dataAtual = new Date();
   const mesAtual = format(dataAtual, "MM");
   const anoAtual = format(dataAtual, "yyyy");
-
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => setMenuOpen(!menuOpen);
 
   return (
     <nav className="flex justify-between items-center px-8 py-4 border-b border-solid">
@@ -64,67 +60,13 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Botão de menu hamburguer para telas pequenas */}
-      <div className="lg:hidden">
-        <button
-          onClick={toggleMenu}
-          className="text-primary focus:outline-none"
-        >
-          {menuOpen ? "X" : "☰"}
-        </button>
-      </div>
-
-      {/* Drawer (Menu lateral) para telas pequenas */}
-      <div
-        className={`${
-          menuOpen ? "block" : "hidden"
-        } fixed inset-0 z-50 lg:hidden`}
-        onClick={toggleMenu}
-      >
-        <div
-          className={`${
-            menuOpen ? "translate-x-0" : "-translate-x-full"
-          } fixed left-0 top-0 w-64 bg-gray-900 text-white h-full p-4 transition-transform ease-in-out duration-300`}
-        >
-          <div className="flex justify-end">
-            <button onClick={toggleMenu} className="text-white">
-              X
-            </button>
-          </div>
-          <Link
-            href={"/"}
-            className={`block py-2 px-4 ${
-              pathname === "/"
-                ? "text-primary font-bold"
-                : "text-muted-foreground"
-            }`}
-          >
-            Dashboard
-          </Link>
-          <Link
-            href={`/transactions?month=${mesAtual}&year=${anoAtual}`}
-            className={`block py-2 px-4 ${
-              pathname === "/transactions"
-                ? "text-primary font-bold"
-                : "text-muted-foreground"
-            }`}
-          >
-            Transações
-          </Link>
-          <Link
-            href={"/subscription"}
-            className={`block py-2 px-4 ${
-              pathname === "/subscription"
-                ? "text-primary font-bold"
-                : "text-muted-foreground"
-            }`}
-          >
-            Assinatura
-          </Link>
+      <div className="flex items-center gap-4">
+        {/* Botão do Drawer para telas mobile com margem à direita */}
+        <div className="mr-24">
+          {" "}
+          {/* Adicionando margem à direita */}
+          <MobileDrawer />
         </div>
-      </div>
-
-      <div>
         <SwitchTheme />
         <UserButton showName />
       </div>
