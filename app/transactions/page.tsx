@@ -36,11 +36,12 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
             de {searchParams.year}
           </h1>
           <div className="flex ml-auto items-center space-y-4 space-x-0 flex-col md:flex-row md:space-x-4 md:space-y-0">
-  <FilterTransaction />
-  <AddTransactionButton userCanAddTransaction={canUserAddTransactions} />
-</div>
-
-        </div>    
+            <FilterTransaction />
+            <AddTransactionButton
+              userCanAddTransaction={canUserAddTransactions}
+            />
+          </div>
+        </div>
         <DataTable
           columns={transactionsColumns}
           data={JSON.parse(JSON.stringify(transactions))}
