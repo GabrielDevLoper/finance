@@ -83,32 +83,32 @@ const AiReportButton = ({
     }
   };
 
-  const loadReport = useCallback(async () => {
-    try {
-      setReportIsLoading(true);
-      const relatorios = await getRelatoriosMensais(month, year);
-
-      if (relatorios?.conteudo) {
-        setReport(relatorios.conteudo);
-      } else {
-        setReport(null);
-      }
-    } catch (error) {
-      console.error("Erro ao carregar relatório:", error);
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Ocorreu um erro ao carregar o relatório.",
-        { className: "bg-red-500 text-white border-none" }
-      );
-    } finally {
-      setReportIsLoading(false);
-    }
-  }, [month, year]); // Dependências do useCallback
-
-  useEffect(() => {
-    loadReport();
-  }, [loadReport]); // Agora o useEffect depende do useCallback, que já tem as dependências corretas
+  // const loadReport = useCallback(async () => {
+  //   try {
+  //     setReportIsLoading(true);
+  //     const relatorios = await getRelatoriosMensais(month, year);
+  //
+  //     if (relatorios?.conteudo) {
+  //       setReport(relatorios.conteudo);
+  //     } else {
+  //       setReport(null);
+  //     }
+  //   } catch (error) {
+  //     console.error("Erro ao carregar relatório:", error);
+  //     toast.error(
+  //       error instanceof Error
+  //         ? error.message
+  //         : "Ocorreu um erro ao carregar o relatório.",
+  //       { className: "bg-red-500 text-white border-none" }
+  //     );
+  //   } finally {
+  //     setReportIsLoading(false);
+  //   }
+  // }, [month, year]); // Dependências do useCallback
+  //
+  // useEffect(() => {
+  //   loadReport();
+  // }, [loadReport]); // Agora o useEffect depende do useCallback, que já tem as dependências corretas
 
   return (
     <Dialog>
