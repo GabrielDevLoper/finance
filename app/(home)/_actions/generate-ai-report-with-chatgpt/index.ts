@@ -75,22 +75,22 @@ export const generateAiReport = async ({
     ],
   });
 
-  await db.usoApiRelatorios.create({
-    data: {
-      id_usuario: userId,
-      ia_descricao: "chatgpt",
-      quantidade_chamadas: 1,
-    },
-  });
-
-  await db.relatoriosMensais.create({
-    data: {
-      id_usuario: userId,
-      mes: month,
-      ano: year,
-      conteudo: completion.choices[0].message.content || "",
-    },
-  });
+  // await db.usoApiRelatorios.create({
+  //   data: {
+  //     id_usuario: userId,
+  //     ia_descricao: "chatgpt",
+  //     quantidade_chamadas: 1,
+  //   },
+  // });
+  //
+  // await db.relatoriosMensais.create({
+  //   data: {
+  //     id_usuario: userId,
+  //     mes: month,
+  //     ano: year,
+  //     conteudo: completion.choices[0].message.content || "",
+  //   },
+  // });
 
   return completion.choices[0].message.content;
 };
