@@ -41,6 +41,8 @@ const AiReportButton = ({
 
       const aiReport = await generateAiReport({ month, year });
 
+      console.log(aiReport);
+
       // Toast de sucesso
       toast.success("Relatório da IA gerado com sucesso ✔️", {
         className: "bg-[#55B02E] text-white border-none",
