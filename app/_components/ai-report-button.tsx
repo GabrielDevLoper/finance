@@ -12,15 +12,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-// import { generateAiReport } from "../(home)/_actions/generate-ai-report-with-chatgpt";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import Markdown from "react-markdown";
 import Link from "next/link";
 import { toast } from "sonner";
 // import { generateAiReportWithDeepSeek } from "../(home)/_actions/generate-ai-report-with-deepseek";
 import { generateAiReport } from "../(home)/_actions/generate-ai-report-with-chatgpt";
-import { getRelatoriosMensais } from "../_actions/get-report";
+// import { getRelatoriosMensais } from "../_actions/get-report";
 
 interface AiReportButtonProps {
   month: string;
