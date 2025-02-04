@@ -79,4 +79,6 @@ enum CategoriaTransacao {
   FREELANCER
   FATURA_CARTAO_CREDITO
   SERVICOS
+  OUTROS
+  RENDA_EXTRA
 }

@@ -47,6 +47,8 @@ export const TRANSACTION_CATEGORY_LABELS = {
   [CategoriaTransacao.SAUDE]: "Saúde",
   [CategoriaTransacao.TRANSPORTE]: "Transporte",
   [CategoriaTransacao.SERVICOS]: "Serviços",
+  [CategoriaTransacao.OUTROS]: "Outros",
+  [CategoriaTransacao.RENDA_EXTRA]: "Renda Extra",
 };
 
 export const TRANSACTION_CATEGORY_OPTIONS = [
@@ -101,5 +103,13 @@ export const TRANSACTION_CATEGORY_OPTIONS = [
   {
     value: CategoriaTransacao.SERVICOS,
     label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.SERVICOS],
+  },
+  {
+    value: CategoriaTransacao.OUTROS,
+    label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.OUTROS],
+  },
+  {
+    value: CategoriaTransacao.RENDA_EXTRA,
+    label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.RENDA_EXTRA],
   },
 ];
