@@ -17,8 +17,8 @@ import { ScrollArea } from "./ui/scroll-area";
 import Markdown from "react-markdown";
 import Link from "next/link";
 import { toast } from "sonner";
-// import { generateAiReport } from "../(home)/_actions/generate-ai-report-with-chatgpt";
-import {generateAiReportWithDeepSeek} from "@/app/(home)/_actions/generate-ai-report-with-deepseek";
+import { generateAiReport } from "../(home)/_actions/generate-ai-report-with-chatgpt";
+// import {generateAiReportWithDeepSeek} from "@/app/(home)/_actions/generate-ai-report-with-deepseek";
 // import { getRelatoriosMensais } from "../_actions/get-report";
 
 interface AiReportButtonProps {
@@ -39,9 +39,7 @@ const AiReportButton = ({
     try {
       setReportIsLoading(true);
 
-      const aiReport = await generateAiReportWithDeepSeek({ month, year });
-
-      console.log(aiReport);
+      const aiReport = await generateAiReport({ month, year });
 
       // Toast de sucesso
       toast.success("Relatório da IA gerado com sucesso ✔️", {
