@@ -52,7 +52,7 @@ export const generateAiReport = async ({ month, year }: GenerateAirReportType) =
   const completion = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages: [
-      { role: "system", content: "Você é um especialista em gestão financeira pessoal." },
+      { role: "system", content: "Você é um especialista em gestão e organização de finanaças pessoais. você ajuda pessoas a organizarem melhor as suas finanças" },
       { role: "user", content },
     ],
   });
