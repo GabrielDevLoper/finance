@@ -27,13 +27,29 @@ export const POST = async (request: Request) => {
   switch (event.type) {
     case "invoice.paid": {
       // atualiza usuario com novo plano
-      const { customer, subscription, subscription_details } =
+      const { customer, subscription, subscription_details, lines } =
         event.data.object;
+
+      // Pega o primeiro item da assinatura (caso tenha mais de um)
+      const priceId = lines.data[0]?.price?.id;
+
+      if (!priceId) {
+        return NextResponse.error();
+      }
 
       const clerkUserId = subscription_details?.metadata?.clerk_user_id;
 
       if (!clerkUserId) {
         return NextResponse.error();
+      }
+
+      // Determina qual plano foi assinado
+      let planType = "free"; // Fallback para um plano gratuito
+
+      if (priceId === process.env.STRIPE_PREMIUM_PLAN_PRICE_ID) {
+        planType = "premium";
+      } else if (priceId === process.env.STRIPE_PLUS_PLAN_PRICE_ID) {
+        planType = "plus";
       }
 
       await clerkClient().users.updateUser(clerkUserId, {
@@ -42,7 +58,7 @@ export const POST = async (request: Request) => {
           stripeSubscriptionId: subscription,
         },
         publicMetadata: {
-          subscriptionPlan: "premium",
+          subscriptionPlan: planType,
         },
       });
       break;

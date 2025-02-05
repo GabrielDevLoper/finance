@@ -3,7 +3,13 @@
 import { auth } from "@clerk/nextjs/server";
 import Stripe from "stripe";
 
-export const createStripeCheckout = async () => {
+interface CreateStripeCheckoutProps {
+  plan_price: string;
+}
+
+export const createStripeCheckout = async ({
+  plan_price,
+}: CreateStripeCheckoutProps) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -29,7 +35,7 @@ export const createStripeCheckout = async () => {
     },
     line_items: [
       {
-        price: process.env.STRIPE_PREMIUM_PLAN_PRICE_ID,
+        price: plan_price,
         quantity: 1,
       },
     ],
