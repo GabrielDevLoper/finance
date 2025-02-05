@@ -36,30 +36,30 @@ export const POST = async (req: Request) => {
       const content = response.choices[0].message.content;
 
       // Função para processar o texto e transformar em objeto
-      const parseTextToObject = (text: string) => {
-        const result: { [key: string]: string } = {};
-        const lines = text.split("\n"); // Divide o texto em linhas
+      //   const parseTextToObject = (text: string) => {
+      //     const result: { [key: string]: string } = {};
+      //     const lines = text.split("\n"); // Divide o texto em linhas
 
-        lines.forEach((line) => {
-          // Remove o hífen e espaços em branco no início e no final
-          const cleanedLine = line.replace(/^-/, "").trim();
-          if (cleanedLine) {
-            // Divide a linha em chave e valor
-            const [key, value] = cleanedLine
-              .split(":")
-              .map((item) => item.trim());
-            if (key && value) {
-              // Adiciona ao objeto resultante
-              result[key.toLowerCase()] = value;
-            }
-          }
-        });
+      //     lines.forEach((line) => {
+      //       // Remove o hífen e espaços em branco no início e no final
+      //       const cleanedLine = line.replace(/^-/, "").trim();
+      //       if (cleanedLine) {
+      //         // Divide a linha em chave e valor
+      //         const [key, value] = cleanedLine
+      //           .split(":")
+      //           .map((item) => item.trim());
+      //         if (key && value) {
+      //           // Adiciona ao objeto resultante
+      //           result[key.toLowerCase()] = value;
+      //         }
+      //       }
+      //     });
 
-        return result;
-      };
+      //     return result;
+      //   };
 
-      // Processa o texto e transforma em objeto
-      const parsed = parseTextToObject(content);
+      //   // Processa o texto e transforma em objeto
+      //   const parsed = parseTextToObject(content);
 
       // Se necessário, converte o objeto para JSON
       //   const json = JSON.stringify(parsed, null, 2);
@@ -80,7 +80,7 @@ export const POST = async (req: Request) => {
       await twilioClient.messages.create({
         from: process.env.TWILIO_WHATSAPP_NUMBER,
         to: From,
-        body: `Cadastrado: ${parsed.titulo} - R$${parsed.valor} (${parsed.categoria})`,
+        body: content,
       });
     } else {
       console.error("Nenhum conteúdo retornado pela API.");
