@@ -1,6 +1,6 @@
 import twilio from "twilio";
 import { OpenAI } from "openai";
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -25,7 +25,7 @@ export const POST = async (req: Request) => {
         {
           role: "system",
           content:
-            "Você é um assistente financeiro. Extraia título, valor, categoria e data de mensagens de gastos. trazer o texto puro sem formatações",
+            "Você é um assistente financeiro. Extraia título, valor(trazer somente numero), categoria, identifique se é despesa, deposito ou investimento e identique se vinher outros dados.",
         },
         { role: "user", content: Body },
       ],
@@ -35,23 +35,35 @@ export const POST = async (req: Request) => {
     if (response.choices && response.choices[0].message.content) {
       const content = response.choices[0].message.content;
 
-      // Função para formatar a string e transformar em objeto
-      const formatStringToObject = (str: string) => {
-        const lines = str.split("\n"); // Divide a string em linhas
+      // Função para processar o texto e transformar em objeto
+      const parseTextToObject = (text: string) => {
         const result: { [key: string]: string } = {};
+        const lines = text.split("\n"); // Divide o texto em linhas
 
-        lines.forEach((line: string) => {
-          const [key, value] = line.split(":").map((item) => item.trim()); // Divide cada linha em chave e valor
-          if (key && value) {
-            result[key.toLowerCase()] = value; // Adiciona ao objeto resultante
+        lines.forEach((line) => {
+          // Remove o hífen e espaços em branco no início e no final
+          const cleanedLine = line.replace(/^-/, "").trim();
+          if (cleanedLine) {
+            // Divide a linha em chave e valor
+            const [key, value] = cleanedLine
+              .split(":")
+              .map((item) => item.trim());
+            if (key && value) {
+              // Adiciona ao objeto resultante
+              result[key.toLowerCase()] = value;
+            }
           }
         });
 
         return result;
       };
 
-      // Formata a string e transforma em objeto
-      const parsed = formatStringToObject(content);
+      // Processa o texto e transforma em objeto
+      const parsed = parseTextToObject(content);
+
+      // Se necessário, converte o objeto para JSON
+      //   const json = JSON.stringify(parsed, null, 2);
+      //   console.log(json);
 
       // Salva no banco de dados
       //   await prisma.despesa.create({
@@ -70,8 +82,6 @@ export const POST = async (req: Request) => {
         to: From,
         body: `Cadastrado: ${parsed.titulo} - R$${parsed.valor} (${parsed.categoria})`,
       });
-
-      return NextResponse.json({ success: true });
     } else {
       console.error("Nenhum conteúdo retornado pela API.");
     }
