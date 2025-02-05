@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Mulish } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "./_components/theme-provider";
 
-const mulish = Mulish({
+const roboto = Roboto({
   subsets: ["latin-ext"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -22,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${mulish.className} antialiased`}>
+      <body className={`${roboto.className} antialiased`}>
         <ClerkProvider
           appearance={{
             baseTheme: dark,
