@@ -9,8 +9,13 @@ const twilioClient = twilio(
   process.env.TWILIO_AUTH_TOKEN
 );
 
+interface RequestBodyProps {
+  Body: string;
+  From: string;
+}
+
 export const POST = async (req: Request) => {
-  const { Body, From } = req.body; // Mensagem enviada pelo usuário no WhatsApp
+  const { Body, From } = (await req.json()) as RequestBodyProps; // Mensagem enviada pelo usuário no WhatsApp
 
   // Usa o ChatGPT para extrair informações
   const response = await openai.chat.completions.create({
