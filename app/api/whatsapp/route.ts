@@ -9,13 +9,11 @@ const twilioClient = twilio(
   process.env.TWILIO_AUTH_TOKEN
 );
 
-interface RequestBodyProps {
-  Body: string;
-  From: string;
-}
-
 export const POST = async (req: Request) => {
-  const { Body, From } = (await req.json()) as RequestBodyProps;
+  // Lê o corpo da requisição no formato x-www-form-urlencoded
+  const formData = await req.formData();
+  const body = formData.get("Body")?.toString() || "";
+  const from = formData.get("From")?.toString() || "";
 
   try {
     // Usa o ChatGPT para extrair informações
@@ -27,7 +25,7 @@ export const POST = async (req: Request) => {
           content:
             "Você é um assistente financeiro. Extraia título, valor(trazer somente numero), categoria, identifique se é despesa, deposito ou investimento e identique se vinher outros dados.",
         },
-        { role: "user", content: Body },
+        { role: "user", content: body },
       ],
     });
 
@@ -79,7 +77,7 @@ export const POST = async (req: Request) => {
       //   Responde ao usuário no WhatsApp
       await twilioClient.messages.create({
         from: process.env.TWILIO_WHATSAPP_NUMBER,
-        to: From,
+        to: from,
         body: content,
       });
     } else {
