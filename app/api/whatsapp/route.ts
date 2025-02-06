@@ -114,12 +114,17 @@ export const POST = async (req: Request) => {
         from: process.env.TWILIO_WHATSAPP_NUMBER,
         to: from,
         body: ` 
-        🔹 **Nome:** ${parsed.nome}
-        🔹 **Valor:** R$${parsed.valor}
-        🔹 **Categoria:** ${validarCategoria(parsed.categoria)}
-        🔹 **Tipo:** ${validarTipo(parsed.tipo)}
+        ✅ *Sua transação foi registrada com sucesso!*
 
-        ✔️ Sua transação foi registrada com sucesso!`,
+        🔹 *Nome:* ${parsed.nome}
+        🔹 *Valor:* R$${parsed.valor}
+        🔹 *Categoria:* ${validarCategoria(parsed.categoria)}
+        🔹 *Tipo:* ${validarTipo(parsed.tipo)}
+        
+          *Você pode acessar suas transações em:* ${
+            process.env.APP_URL
+          }/transactions?month=${mesAtual}&year=${anoAtual}
+        `,
       });
 
       return NextResponse.json({ success: true });
