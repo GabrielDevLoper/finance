@@ -1,6 +1,9 @@
 import twilio from "twilio";
 import { OpenAI } from "openai";
 import { NextResponse } from "next/server";
+import { db } from "@/app/_lib/prisma";
+import { validarCategoria, validarTipo } from "@/app/_constants/transaction";
+
 // import { NextResponse } from "next/server";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -31,8 +34,43 @@ export const POST = async (req: Request) => {
       messages: [
         {
           role: "system",
-          content:
-            "Você é um assistente financeiro. Extraia título, valor(trazer somente numero), categoria, identifique se é despesa, deposito ou investimento e identique se vinher outros dados.",
+          content: `
+                    Você é um assistente financeiro especializado em classificar transações a partir de frases curtas. Seu objetivo é extrair corretamente o nome, valor, categoria e tipo da transação.  
+
+            ⚠️ **Regras importantes:**
+            - Retorne **apenas um JSON válido** (sem explicações ou formatação desnecessária).
+            - O valor deve ser um número (sem símbolos como R$ ou ponto decimal para milhares).
+            - O **tipo da transação** deve ser um dos seguintes:
+            - "DEPOSITO" → Quando for um salário, renda extra ou recebimento de freelancer.
+            - "DESPESA" → Para qualquer gasto (alimentação, conta, serviço, lazer, fatura ,etc.).
+            - "INVESTIMENTO" → Quando a frase indicar aplicação financeira.
+
+            - A **categoria** deve ser uma das seguintes:
+            - "TRANSPORTE" → Uber, gasolina, passagem, estacionamento, combustivel.
+            - "EDUCACAO" → Escola, faculdade, cursos, livros.
+            - "SAUDE" → Médico, remédio, exames, academia.
+            - "LAZER" → Viagens, cinema, festas, hobbies.
+            - "MORADIA" → Aluguel, condomínio, conta de luz, água, internet, manutencao na casa.
+            - "ALIMENTACAO" → Restaurante, supermercado, comida em geral.
+            - "SALARIO" → Salário fixo recebido mensalmente.
+            - "FINANCIAMENTO" → Pagamentos de financiamentos ou empréstimos.
+            - "FINANCEIRO" → Investimentos, poupança, aplicações.
+            - "FREELANCER" → Trabalho extra, serviços prestados.
+            - "FATURA_CARTAO_CREDITO" → Pagamento da fatura do cartão de crédito.
+            - "SERVICOS" → Assinaturas, manutenção, serviços diversos.
+            - "OUTROS" → Quando não se encaixar em nenhuma categoria específica.
+            - "RENDA_EXTRA" → Qualquer renda além do salário principal.
+
+            🎯 **Formato de saída esperado (JSON):**
+            
+            {
+            "nome": "NOME_EXTRAIDO",
+            "valor": 100, 
+            "categoria": "CATEGORIA_CLASSIFICADA",
+            "tipo": "TIPO_CLASSIFICADO"
+            }
+
+        `,
         },
         { role: "user", content: body },
       ],
@@ -42,46 +80,19 @@ export const POST = async (req: Request) => {
     if (response.choices && response.choices[0].message.content) {
       const content = response.choices[0].message.content;
 
-      // Função para processar o texto e transformar em objeto
-      //   const parseTextToObject = (text: string) => {
-      //     const result: { [key: string]: string } = {};
-      //     const lines = text.split("\n"); // Divide o texto em linhas
+      // Processa o texto e transforma em objeto
+      const parsed = JSON.parse(content);
 
-      //     lines.forEach((line) => {
-      //       // Remove o hífen e espaços em branco no início e no final
-      //       const cleanedLine = line.replace(/^-/, "").trim();
-      //       if (cleanedLine) {
-      //         // Divide a linha em chave e valor
-      //         const [key, value] = cleanedLine
-      //           .split(":")
-      //           .map((item) => item.trim());
-      //         if (key && value) {
-      //           // Adiciona ao objeto resultante
-      //           result[key.toLowerCase()] = value;
-      //         }
-      //       }
-      //     });
-
-      //     return result;
-      //   };
-
-      //   // Processa o texto e transforma em objeto
-      //   const parsed = parseTextToObject(content);
-
-      // Se necessário, converte o objeto para JSON
-      //   const json = JSON.stringify(parsed, null, 2);
-      //   console.log(json);
-
-      // Salva no banco de dados
-      //   await prisma.despesa.create({
-      //     data: {
-      //       titulo: parsed.titulo,
-      //       valor: parsed.valor,
-      //       categoria: parsed.categoria,
-      //       data: new Date(),
-      //       usuario: From,
-      //     },
-      //   });
+      //     Salva no banco de dados
+      await db.transacoes.create({
+        data: {
+          nome: parsed.nome,
+          valor: parseFloat(parsed.valor),
+          categoria: validarCategoria(parsed.categoria),
+          tipo: validarTipo(parsed.tipo),
+          id_usuario: from,
+        },
+      });
 
       //   Responde ao usuário no WhatsApp
       await twilioClient.messages.create({
@@ -96,7 +107,6 @@ export const POST = async (req: Request) => {
     }
   } catch (apiError) {
     console.error("Erro ao chamar a API do OpenAI:", apiError);
+    return NextResponse.error();
   }
-
-  return NextResponse.json({ success: true });
 };

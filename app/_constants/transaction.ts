@@ -113,3 +113,19 @@ export const TRANSACTION_CATEGORY_OPTIONS = [
     label: TRANSACTION_CATEGORY_LABELS[CategoriaTransacao.RENDA_EXTRA],
   },
 ];
+
+// Função para validar se a categoria retornada é válida
+export function validarCategoria(categoria: string): CategoriaTransacao {
+  return Object.values(CategoriaTransacao).includes(
+    categoria as CategoriaTransacao
+  )
+    ? (categoria as CategoriaTransacao)
+    : CategoriaTransacao.OUTROS; // Padrão para categorias inválidas
+}
+
+// Função para validar se o tipo retornado é válido
+export function validarTipo(tipo: string): TipoTransacao {
+  return Object.values(TipoTransacao).includes(tipo as TipoTransacao)
+    ? (tipo as TipoTransacao)
+    : TipoTransacao.DESPESA; // Padrão para tipos inválidos
+}
