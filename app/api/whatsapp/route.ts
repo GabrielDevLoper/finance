@@ -9,20 +9,20 @@ import { StatusTransacao } from "@prisma/client";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
+  throw new Error("Credenciais do Twilio não configuradas.");
+}
+
+if (!process.env.TWILIO_WHATSAPP_NUMBER) {
+  throw new Error("Número do Twilio não configurado.");
+}
+
 const twilioClient = twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
 );
 
 export const POST = async (req: Request) => {
-  if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
-    throw new Error("Credenciais do Twilio não configuradas.");
-  }
-
-  if (!process.env.TWILIO_WHATSAPP_NUMBER) {
-    throw new Error("Número do Twilio não configurado.");
-  }
-
   // Lê o corpo da requisição no formato x-www-form-urlencoded
   const formData = await req.formData();
   const body = formData.get("Body")?.toString() || "";
