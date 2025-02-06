@@ -5,6 +5,7 @@ import { db } from "@/app/_lib/prisma";
 import { validarCategoria, validarTipo } from "@/app/_constants/transaction";
 import { clerkClient, User } from "@clerk/nextjs/server";
 import { format } from "date-fns";
+import { StatusTransacao } from "@prisma/client";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -104,6 +105,7 @@ export const POST = async (req: Request) => {
           id_usuario: userList[0].id,
           ano: anoAtual,
           mes: mesAtual,
+          status: StatusTransacao.PAGO,
         },
       });
 
