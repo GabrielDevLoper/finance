@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/app/_lib/prisma";
 import { validarCategoria, validarTipo } from "@/app/_constants/transaction";
 import { clerkClient, User } from "@clerk/nextjs/server";
+import { format } from "date-fns";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -89,6 +90,9 @@ export const POST = async (req: Request) => {
       });
 
       const userList: User[] = userListResponse.data;
+      const dataAtual = new Date();
+      const mesAtual = format(dataAtual, "MM");
+      const anoAtual = format(dataAtual, "yyyy");
 
       //     Salva no banco de dados
       await db.transacoes.create({
@@ -98,6 +102,8 @@ export const POST = async (req: Request) => {
           categoria: validarCategoria(parsed.categoria),
           tipo: validarTipo(parsed.tipo),
           id_usuario: userList[0].id,
+          ano: anoAtual,
+          mes: mesAtual,
         },
       });
 
