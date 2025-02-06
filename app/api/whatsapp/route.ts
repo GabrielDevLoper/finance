@@ -98,7 +98,10 @@ export const POST = async (req: Request) => {
       await twilioClient.messages.create({
         from: process.env.TWILIO_WHATSAPP_NUMBER,
         to: from,
-        body: content,
+        body: `Transação cadastrada com sucesso: ${parsed.nome} - 
+        R$${parsed.valor} - (${validarCategoria(
+          parsed.categoria
+        )}) - ${validarTipo(parsed.tipo)}`,
       });
 
       return NextResponse.json({ success: true });
