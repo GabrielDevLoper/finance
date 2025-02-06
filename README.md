@@ -1,81 +1,122 @@
-# Documentação Técnica - Aplicativo de Controle Financeiro
+# Documentação do Projeto **Finance IA**
 
-## Visão Geral
+O **Finance IA** é uma aplicação que utiliza tecnologias modernas para oferecer funcionalidades avançadas de gestão financeira, comunicação e automação. Abaixo, estão detalhados os principais componentes, tecnologias e serviços utilizados no desenvolvimento e operação da aplicação.
 
-A aplicação de controle financeiro tem como objetivo permitir o gerenciamento de despesas e receitas, proporcionando insights gerados pela API do ChatGPT. A solução conta com autenticação via Clerk, processamento de pagamentos com Stripe e interface responsiva utilizando Next.js, TailwindCSS e ShadCN.
+---
 
-## Tecnologias Utilizadas
+## **Tecnologias Utilizadas**
 
-- **Next.js** - Framework React para aplicações web modernas
-- **TailwindCSS** - Biblioteca de estilização baseada em utilitários
-- **ShadCN** - Componentes prontos para UI
-- **Stripe** - Plataforma de pagamentos
-- **Clerk** - Serviço de autenticação
-- **API do ChatGPT** - Geração de relatórios e insights financeiros
+### **Frontend**
 
-## Configuração do Ambiente
+1. **Next.js**
 
-Para rodar a aplicação localmente, siga os seguintes passos:
+   - Framework React utilizado para construir a interface do usuário.
+   - Oferece suporte a renderização do lado do servidor (SSR), geração estática (SSG) e APIs integradas.
 
-### 1. Clonar o Repositório
+2. **Tailwind CSS**
 
-```sh
- git clone https://github.com/seu-repositorio.git
- cd seu-repositorio
-```
+   - Biblioteca de estilização utilitária para criar interfaces responsivas e consistentes.
+   - Permite personalização rápida e eficiente dos componentes visuais.
 
-### 2. Instalar Dependências
+3. **Shadcn-ui**
+   - Biblioteca de componentes reutilizáveis baseada em Tailwind CSS.
+   - Facilita a criação de interfaces modernas e acessíveis.
 
-```sh
-npm install
-# ou
-yarn install
-```
+---
 
-### 3. Configuração das Variáveis de Ambiente
+## **Backend e Persistência de Dados**
 
-Crie um arquivo `.env.local` na raiz do projeto e configure as seguintes variáveis:
+### **Prisma ORM**
 
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=SEU_CLERK_PUBLISHABLE_KEY
-CLERK_SECRET_KEY=SEU_CLERK_SECRET_KEY
-STRIPE_SECRET_KEY=SEU_STRIPE_SECRET_KEY
-STRIPE_WEBHOOK_SECRET=SEU_STRIPE_WEBHOOK_SECRET
-OPENAI_API_KEY=SUA_OPENAI_API_KEY
-```
+- Gerenciador de persistência de dados que facilita a interação com o banco de dados.
+- Fornece uma camada abstrata para consultas SQL, garantindo segurança e desempenho.
 
-### 4. Executar a Aplicação
+### **PostgreSQL**
 
-```sh
-npm run dev
-# ou
-yarn dev
-```
+- Banco de dados relacional utilizado para armazenar informações da aplicação.
+- Suporta consultas complexas, integridade referencial e escalabilidade.
 
-A aplicação estará disponível em `http://localhost:3000`
+### **Neon DB**
 
-## Configuração do Webhook do Stripe
+- Serviço de banco de dados PostgreSQL totalmente gerenciado e hospedado na nuvem.
+- **Funcionalidades:**
+  - Provisionamento instantâneo de bancos de dados.
+  - Escalabilidade automática e alta disponibilidade.
+  - Integração nativa com Prisma ORM para facilitar a migração e sincronização de esquemas.
+  - Monitoramento em tempo real e backups automáticos.
 
-Para testar pagamentos e webhooks do Stripe localmente:
+---
 
-### 1. Instalar a CLI do Stripe
+## **Serviços Integrados**
 
-Baixe e instale a [Stripe CLI](https://stripe.com/docs/stripe-cli)
+### **Stripe**
 
-### 2. Autenticar na Stripe
+- Plataforma de pagamento utilizada para processar transações financeiras.
+- **Configurações necessárias:**
+  - Configurar variáveis de autenticação do Stripe no ambiente da aplicação.
+  - Implementar endpoints para lidar com pagamentos, assinaturas e webhooks.
 
-```sh
-stripe login
-```
+### **Twilio**
 
-### 3. Iniciar o Webhook
+- Serviço de comunicação utilizado para envio de mensagens via WhatsApp.
+- **Funcionalidades implementadas:**
+  - Integração de dados do sistema para envio de notificações automatizadas.
+  - Comunicação bidirecional entre usuários e a aplicação.
 
-```sh
-./stripe listen --forward-to localhost:3000/api/webhooks/stripe
-```
+### **OpenAI (ChatGPT ou DeepSeek)**
 
-Isso gerará um `STRIPE_WEBHOOK_SECRET` que deve ser adicionado ao `.env.local`
+- API de inteligência artificial utilizada para:
+  - Geração de respostas automáticas.
+  - Análise de dados financeiros.
+  - Sugestões personalizadas para os usuários.
 
-## Considerações Finais
+---
 
-Essa documentação cobre a configuração inicial e principais funcionalidades da aplicação. Para mais informações, consulte a documentação oficial das tecnologias utilizadas.
+## **Hospedagem**
+
+### **Vercel**
+
+- Plataforma utilizada para hospedar e implantar a aplicação.
+- Vantagens:
+  - Deploy contínuo integrado ao GitHub/GitLab.
+  - Escalabilidade automática.
+  - CDN global para melhor desempenho.
+
+---
+
+## **Resumo das Funcionalidades**
+
+| **Componente**   | **Descrição**                                                            |
+| ---------------- | ------------------------------------------------------------------------ |
+| **Next.js**      | Framework principal para construção da aplicação frontend e backend.     |
+| **Tailwind CSS** | Estilização responsiva e modular para a interface do usuário.            |
+| **Shadcn-ui**    | Componentes reutilizáveis para acelerar o desenvolvimento da UI.         |
+| **Prisma ORM**   | Gerenciamento de banco de dados com suporte a PostgreSQL.                |
+| **PostgreSQL**   | Armazenamento seguro e escalável de dados relacionais.                   |
+| **Neon DB**      | Serviço de banco de dados PostgreSQL gerenciado e hospedado na nuvem.    |
+| **Stripe**       | Processamento de pagamentos e gerenciamento de assinaturas.              |
+| **Twilio**       | Comunicação via WhatsApp e integração de dados com o sistema.            |
+| **OpenAI**       | Inteligência artificial para análise e automação de tarefas financeiras. |
+| **Vercel**       | Hospedagem robusta e escalável para a aplicação.                         |
+
+---
+
+## **Próximos Passos**
+
+1. **Melhorias na Documentação**
+
+   - Detalhar fluxos de trabalho específicos.
+   - Adicionar exemplos de uso para cada serviço integrado.
+
+2. **Otimizações de Desempenho**
+
+   - Implementar cache estratégico para reduzir carga no servidor.
+   - Avaliar possíveis gargalos no banco de dados.
+
+3. **Expansão de Funcionalidades**
+   - Integrar novas APIs de IA para ampliar as capacidades analíticas.
+   - Explorar novos canais de comunicação além do WhatsApp.
+
+---
+
+Com esta estrutura e documentação, o projeto **Finance IA** está bem posicionado para evoluir continuamente, garantindo uma experiência robusta e eficiente para seus usuários.
