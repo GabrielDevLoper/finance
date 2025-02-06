@@ -97,4 +97,6 @@ export const POST = async (req: Request) => {
   } catch (apiError) {
     console.error("Erro ao chamar a API do OpenAI:", apiError);
   }
+
+  return NextResponse.json({ success: true });
 };
