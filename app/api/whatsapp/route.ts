@@ -1,5 +1,6 @@
 import twilio from "twilio";
 import { OpenAI } from "openai";
+import { NextResponse } from "next/server";
 // import { NextResponse } from "next/server";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -10,6 +11,14 @@ const twilioClient = twilio(
 );
 
 export const POST = async (req: Request) => {
+  if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
+    throw new Error("Credenciais do Twilio não configuradas.");
+  }
+
+  if (!process.env.TWILIO_WHATSAPP_NUMBER) {
+    throw new Error("Número do Twilio não configurado.");
+  }
+
   // Lê o corpo da requisição no formato x-www-form-urlencoded
   const formData = await req.formData();
   const body = formData.get("Body")?.toString() || "";
@@ -80,6 +89,8 @@ export const POST = async (req: Request) => {
         to: from,
         body: content,
       });
+
+      return NextResponse.json({ success: true });
     } else {
       console.error("Nenhum conteúdo retornado pela API.");
     }
