@@ -3,8 +3,7 @@ import { OpenAI } from "openai";
 import { NextResponse } from "next/server";
 import { db } from "@/app/_lib/prisma";
 import { validarCategoria, validarTipo } from "@/app/_constants/transaction";
-
-// import { NextResponse } from "next/server";
+import { clerkClient, User } from "@clerk/nextjs/server";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -38,6 +37,7 @@ export const POST = async (req: Request) => {
                     Você é um assistente financeiro especializado em classificar transações a partir de frases curtas. Seu objetivo é extrair corretamente o nome, valor, categoria e tipo da transação.  
 
             ⚠️ **Regras importantes:**
+            - verificar se e enviado o email do usuario
             - Retorne **apenas um JSON válido** (sem explicações ou formatação desnecessária).
             - O valor deve ser um número (sem símbolos como R$ ou ponto decimal para milhares).
             - O **tipo da transação** deve ser um dos seguintes:
@@ -68,6 +68,7 @@ export const POST = async (req: Request) => {
             "valor": 100, 
             "categoria": "CATEGORIA_CLASSIFICADA",
             "tipo": "TIPO_CLASSIFICADO"
+            "email": "EMAIL_USUARIO"
             }
 
         `,
@@ -83,6 +84,12 @@ export const POST = async (req: Request) => {
       // Processa o texto e transforma em objeto
       const parsed = JSON.parse(content);
 
+      const userListResponse = await clerkClient().users.getUserList({
+        emailAddress: parsed.email,
+      });
+
+      const userList: User[] = userListResponse.data;
+
       //     Salva no banco de dados
       await db.transacoes.create({
         data: {
@@ -90,7 +97,7 @@ export const POST = async (req: Request) => {
           valor: parseFloat(parsed.valor),
           categoria: validarCategoria(parsed.categoria),
           tipo: validarTipo(parsed.tipo),
-          id_usuario: from,
+          id_usuario: userList[0].id,
         },
       });
 
@@ -98,10 +105,13 @@ export const POST = async (req: Request) => {
       await twilioClient.messages.create({
         from: process.env.TWILIO_WHATSAPP_NUMBER,
         to: from,
-        body: `Transação cadastrada com sucesso: ${parsed.nome} - 
-        R$${parsed.valor} - (${validarCategoria(
-          parsed.categoria
-        )}) - ${validarTipo(parsed.tipo)}`,
+        body: ` 
+        🔹 **Nome:** ${parsed.nome}
+        🔹 **Valor:** R$${parsed.valor}
+        🔹 **Categoria:** ${validarCategoria(parsed.categoria)}
+        🔹 **Tipo:** ${validarTipo(parsed.tipo)}
+
+        ✔️ Sua transação foi registrada com sucesso!`,
       });
 
       return NextResponse.json({ success: true });
