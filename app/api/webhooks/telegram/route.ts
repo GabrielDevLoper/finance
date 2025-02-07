@@ -40,5 +40,5 @@ export const POST = async (req: Request) => {
   🔹 *Tipo:* ${validarTipo(body.tipo)}
 `;
 
-  return NextResponse.json(response);
+  return NextResponse.json({ response });
 };
