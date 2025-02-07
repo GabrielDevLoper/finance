@@ -8,11 +8,8 @@ import { NextResponse } from "next/server";
 export const POST = async (req: Request) => {
   const body = await req.json(); // Obtendo o corpo da requisição
 
-  // Processa o texto e transforma em objeto
-  const parsed = JSON.parse(body);
-
   const userListResponse = await clerkClient().users.getUserList({
-    emailAddress: parsed.email,
+    emailAddress: body.email,
   });
 
   const userList: User[] = userListResponse.data;
@@ -23,10 +20,10 @@ export const POST = async (req: Request) => {
   //     Salva no banco de dados
   await db.transacoes.create({
     data: {
-      nome: parsed.nome,
-      valor: parseFloat(parsed.valor),
-      categoria: validarCategoria(parsed.categoria),
-      tipo: validarTipo(parsed.tipo),
+      nome: body.nome,
+      valor: parseFloat(body.valor),
+      categoria: validarCategoria(body.categoria),
+      tipo: validarTipo(body.tipo),
       id_usuario: userList[0].id,
       ano: anoAtual,
       mes: mesAtual,
@@ -37,10 +34,10 @@ export const POST = async (req: Request) => {
   const response = ` 
   ✅ *Sua transação foi registrada com sucesso!*
 
-  🔹 *Nome:* ${parsed.nome}
-  🔹 *Valor:* R$${parsed.valor}
-  🔹 *Categoria:* ${validarCategoria(parsed.categoria)}
-  🔹 *Tipo:* ${validarTipo(parsed.tipo)}
+  🔹 *Nome:* ${body.nome}
+  🔹 *Valor:* R$${body.valor}
+  🔹 *Categoria:* ${validarCategoria(body.categoria)}
+  🔹 *Tipo:* ${validarTipo(body.tipo)}
 `;
 
   return NextResponse.json(response);
