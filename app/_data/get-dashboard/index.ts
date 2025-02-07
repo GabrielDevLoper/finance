@@ -1,5 +1,5 @@
 import { db } from "@/app/_lib/prisma";
-import { TipoTransacao } from "@prisma/client";
+import { StatusTransacao, TipoTransacao } from "@prisma/client";
 import {
   TotalDespesaPorCategoria,
   TransactionPercentagePerType,
@@ -43,6 +43,33 @@ export const getDashboard = async ({ ano, mes }: GetDashboardProps) => {
     )._sum?.valor
   );
 
+  const despesasDoMesPagas = Number(
+    (
+      await db.transacoes.aggregate({
+        where: { ...where, tipo: "DESPESA", status: StatusTransacao.PAGO },
+        _sum: { valor: true },
+      })
+    )._sum?.valor
+  );
+
+  const despesasTotalPendentes = Number(
+    (
+      await db.transacoes.aggregate({
+        where: { ...where, tipo: "DESPESA", status: StatusTransacao.PENDENTE },
+        _sum: { valor: true },
+      })
+    )._sum?.valor
+  );
+
+  const despesasTotalPagas = Number(
+    (
+      await db.transacoes.aggregate({
+        where: { ...where, tipo: "DESPESA", status: StatusTransacao.PAGO },
+        _sum: { valor: true },
+      })
+    )._sum?.valor
+  );
+
   const depositosTotal = Number(
     (
       await db.transacoes.aggregate({
@@ -52,7 +79,7 @@ export const getDashboard = async ({ ano, mes }: GetDashboardProps) => {
     )._sum?.valor
   );
 
-  const balancoGeral = depositosTotal - investimentosTotal - despesasTotal;
+  const balancoGeral = depositosTotal - investimentosTotal - despesasDoMesPagas;
 
   const totalTransacoes = Number(
     (
@@ -111,5 +138,7 @@ export const getDashboard = async ({ ano, mes }: GetDashboardProps) => {
     tiposPorcentagem,
     totalDespesaPorCategoria,
     ultimasTransacoes: JSON.parse(JSON.stringify(ultimasTransacoes)),
+    despesasTotalPendentes,
+    despesasTotalPagas,
   };
 };

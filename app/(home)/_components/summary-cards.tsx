@@ -13,13 +13,17 @@ interface SummaryCardsProps {
   investimentosTotal: number;
   depositosTotal: number;
   despesasTotal: number;
+  despesasTotalPendentes: number;
+  despesasTotalPagas: number;
 }
 
 const SummaryCards = async ({
   balancoGeral,
   depositosTotal,
-  despesasTotal,
+  // despesasTotal,
   investimentosTotal,
+  despesasTotalPendentes,
+  despesasTotalPagas,
 }: SummaryCardsProps) => {
   return (
     <div className="space-y-6">
@@ -31,7 +35,7 @@ const SummaryCards = async ({
       />
 
       {/* Responsivo: Para telas pequenas, um card por linha */}
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 gap-6">
         <SummaryCard
           icon={<PiggyBankIcon size={16} className="text-cyan-500" />}
           title="Investido"
@@ -46,8 +50,13 @@ const SummaryCards = async ({
 
         <SummaryCard
           icon={<TrendingDownIcon size={16} className="text-danger" />}
-          title="Despesas"
-          value={despesasTotal}
+          title="Despesas Pendentes"
+          value={despesasTotalPendentes}
+        />
+        <SummaryCard
+          icon={<TrendingDownIcon size={16} className="text-cyan-500" />}
+          title="Despesas Pagas"
+          value={despesasTotalPagas}
         />
       </div>
     </div>
