@@ -6,13 +6,19 @@ import { format } from "date-fns";
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
+  const body = await req.json(); // Obtendo o corpo da requisição
+
+  const userListResponse = await clerkClient().users.getUserList({
+    emailAddress: body.email,
+  });
+
+  if (userListResponse.data.length <= 0) {
+    const response = `Verifique se o e-mail informado está correto. Não encontramos nenhum usuário com o e-mail ${body.email}.`;
+
+    return NextResponse.json({ response });
+  }
+
   try {
-    const body = await req.json(); // Obtendo o corpo da requisição
-
-    const userListResponse = await clerkClient().users.getUserList({
-      emailAddress: body.email,
-    });
-
     const userList: User[] = userListResponse.data;
     const dataAtual = new Date();
     const mesAtual = format(dataAtual, "MM");
@@ -45,7 +51,9 @@ export const POST = async (req: Request) => {
 
     return NextResponse.json({ response });
   } catch (error) {
-    console.error("Erro ao registrar transação:", error);
-    return NextResponse.error();
+    console.log(error);
+    const response = `Falha ao registrar a transação. Tente novamente mais tarde.`;
+
+    return NextResponse.json({ response });
   }
 };
