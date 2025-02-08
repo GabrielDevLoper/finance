@@ -38,6 +38,8 @@ export const POST = async (req: Request) => {
   🔹 *Valor:* R$${body.valor}
   🔹 *Categoria:* ${validarCategoria(body.categoria)}
   🔹 *Tipo:* ${validarTipo(body.tipo)}
+
+  Data: ${dataAtual.toLocaleDateString("pt-BR")}
 `;
 
   return NextResponse.json({ response });
