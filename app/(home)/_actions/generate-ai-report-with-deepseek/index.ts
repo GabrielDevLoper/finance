@@ -68,7 +68,7 @@ export const generateAiReportWithDeepSeek = async ({
       {
         role: "system",
         content:
-          "Você é um especialista em gestão e organização de finanaças pessoais. você ajuda pessoas a organizarem melhor as suas finanças",
+          "Você é um especialista em gestão e organização de finanças pessoais. você ajuda pessoas a organizarem melhor as suas finanças",
       },
       {
         role: "user",

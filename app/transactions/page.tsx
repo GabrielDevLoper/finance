@@ -1,5 +1,6 @@
 import { DataTable } from "../_components/ui/data-table";
 import { transactionsColumns } from "./_columns";
+import { transactionsColumnsMobile } from "./_columns/transactionsColumnsMobile"; // Nova configuração de colunas
 import AddTransactionButton from "../_components/add-transaction-button";
 import Navbar from "../_components/navbar";
 import { auth } from "@clerk/nextjs/server";
@@ -42,10 +43,22 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
             />
           </div>
         </div>
-        <DataTable
-          columns={transactionsColumns}
-          data={JSON.parse(JSON.stringify(transactions))}
-        />
+
+        {/* Tabela Desktop */}
+        <div className="hidden md:block">
+          <DataTable
+            columns={transactionsColumns}
+            data={JSON.parse(JSON.stringify(transactions))}
+          />
+        </div>
+
+        {/* Tabela Mobile */}
+        <div className="block md:hidden">
+          <DataTable
+            columns={transactionsColumnsMobile}
+            data={JSON.parse(JSON.stringify(transactions))}
+          />
+        </div>
       </div>
     </>
   );

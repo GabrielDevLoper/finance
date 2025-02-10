@@ -54,6 +54,16 @@ model RelatoriosMensais {
   @@map("relatorios_mensais")
 }
 
+model UsuarioServicoTelegram {
+  id                  String   @id @default(uuid())
+  id_usuario_clerk    String?
+  id_usuario_telegram String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("usuario_servico_telegram")
+}
+
 enum StatusTransacao {
   PAGO
   PENDENTE
