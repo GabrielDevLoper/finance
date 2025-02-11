@@ -1,59 +1,63 @@
 import { validarCategoria, validarTipo } from "@/app/_constants/transaction";
 import { db } from "@/app/_lib/prisma";
-import { clerkClient, User } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs/server";
 import { StatusTransacao } from "@prisma/client";
 import { format } from "date-fns";
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
-  const body = await req.json(); // Obtendo o corpo da requisição
-
-  const userListResponse = await clerkClient().users.getUserList({
-    emailAddress: body.email,
-  });
-
-  if (userListResponse.data.length <= 0) {
-    const response = `Verifique se o e-mail informado está correto. Não encontramos nenhum usuário com o e-mail ${body.email}.`;
-
-    return NextResponse.json({ response });
-  }
-
   try {
-    const userList: User[] = userListResponse.data;
+    const { nome, valor, categoria, tipo, email, id_usuario_telegram } =
+      await req.json();
     const dataAtual = new Date();
     const mesAtual = format(dataAtual, "MM");
     const anoAtual = format(dataAtual, "yyyy");
 
-    //     Salva no banco de dados
+    let user = await db.usuarioServicoTelegram.findFirst({
+      where: { id_usuario_telegram },
+    });
+
+    if (!user) {
+      const userListResponse = await clerkClient.users.getUserList({
+        emailAddress: email,
+      });
+      const usuarioClerk = userListResponse.data[0]?.id;
+
+      if (!usuarioClerk) {
+        return NextResponse.json({
+          response: `Verifique se o e-mail informado está correto. Não encontramos nenhum usuário com o e-mail ${email}.`,
+        });
+      }
+
+      user = await db.usuarioServicoTelegram.create({
+        data: { id_usuario_clerk: usuarioClerk, id_usuario_telegram },
+      });
+    }
+
     await db.transacoes.create({
       data: {
-        nome: body.nome,
-        valor: parseFloat(body.valor),
-        categoria: validarCategoria(body.categoria),
-        tipo: validarTipo(body.tipo),
-        id_usuario: userList[0].id,
+        nome,
+        valor: parseFloat(valor),
+        categoria: validarCategoria(categoria),
+        tipo: validarTipo(tipo),
+        id_usuario: user.id_usuario_clerk!,
         ano: anoAtual,
         mes: mesAtual,
         status: StatusTransacao.PAGO,
       },
     });
 
-    const response = ` 
-    ✅ *Sua transação foi registrada com sucesso!*
-
-    🔹 *Nome:* ${body.nome}
-    🔹 *Valor:* R$${body.valor}
-    🔹 *Categoria:* ${validarCategoria(body.categoria)}
-    🔹 *Tipo:* ${validarTipo(body.tipo)}
-
-    Data: ${dataAtual.toLocaleDateString("pt-BR")}
-    `;
-
-    return NextResponse.json({ response });
+    return NextResponse.json({
+      response: `✅ *Sua transação foi registrada com sucesso!*\n\n🔹 *Nome:* ${nome}\n🔹 *Valor:* R$${valor}\n🔹 *Categoria:* ${validarCategoria(
+        categoria
+      )}\n🔹 *Tipo:* ${validarTipo(
+        tipo
+      )}\n\nData: ${dataAtual.toLocaleDateString("pt-BR")}`,
+    });
   } catch (error) {
-    console.log(error);
-    const response = `Falha ao registrar a transação. Tente novamente mais tarde.`;
-
-    return NextResponse.json({ response });
+    console.error("Erro ao registrar transação:", error);
+    return NextResponse.json({
+      response: "Falha ao registrar a transação. Tente novamente mais tarde.",
+    });
   }
 };

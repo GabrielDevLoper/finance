@@ -42,6 +42,16 @@ model UsoApiRelatorios {
   @@map("uso_api_relatorios")
 }
 
+model UsuarioServicoTelegram {
+  id                  String   @id @default(uuid())
+  id_usuario_clerk    String?
+  id_usuario_telegram String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("usuario_servico_telegram")
+}
+
 model RelatoriosMensais {
   id         String   @id @default(uuid())
   id_usuario String
