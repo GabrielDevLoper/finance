@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/app/_components/ui/badge";
-import { Transacoes } from "@prisma/client";
+import { StatusTransacao, Transacoes } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { CircleIcon } from "lucide-react";
 import TransactionTypeBadge from "../_components/type-badge";
@@ -9,6 +9,16 @@ import TransactionTypeBadge from "../_components/type-badge";
 import { TRANSACTION_CATEGORY_LABELS } from "@/app/_constants/transaction";
 import EditTransactionButton from "../_components/edit-transaction-button";
 import DeleteTransactionButton from "../_components/delete-transaction-button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/_components/ui/select";
+import { toast } from "sonner";
+
+import { updateStatusTransaction } from "../_actions/update-status-transaction";
 
 export const transactionsColumns: ColumnDef<Transacoes>[] = [
   {
@@ -56,29 +66,54 @@ export const transactionsColumns: ColumnDef<Transacoes>[] = [
     accessorKey: "status",
     header: "Status Pagamento",
     cell: ({ row: { original: transaction } }) => {
-      if (transaction.status === "PAGO") {
-        return (
-          <Badge className="bg-muted text-primary hover:bg-muted font-bold">
-            <CircleIcon className="fill-primary mr-2" size={10} />
-            Pago
-          </Badge>
-        );
-      }
-
-      if (transaction.status === "RECEBIDO") {
-        return (
-          <Badge className="bg-muted text-primary hover:bg-muted font-bold">
-            <CircleIcon className="fill-primary mr-2" size={10} />
-            Recebido
-          </Badge>
-        );
-      }
+      const handleStatusChange = async (status: StatusTransacao) => {
+        try {
+          await updateStatusTransaction({
+            transactionId: transaction.id,
+            status,
+          });
+          toast.success(`Status atualizado com sucesso ✔️`, {
+            className: "bg-[#55B02E] text-white border-none",
+          });
+        } catch (error) {
+          console.error("Erro ao atualizar o status:", error);
+          toast.error("Erro ao atualizar o status. Tente novamente.");
+        }
+      };
 
       return (
-        <Badge className="bg-muted text-yellow-300 hover:bg-muted font-bold">
-          <CircleIcon className="fill-yellow-300 mr-2" size={10} />
-          Pendente
-        </Badge>
+        <>
+          <Select
+            value={transaction.status || StatusTransacao.PENDENTE} // Fallback para "PENDENTE"
+            onValueChange={(value: StatusTransacao) => {
+              handleStatusChange(value);
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Selecione o status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={StatusTransacao.PAGO}>
+                <Badge className="bg-muted text-primary hover:bg-muted font-bold">
+                  <CircleIcon className="fill-primary mr-2" size={10} />
+                  Pago
+                </Badge>
+              </SelectItem>
+              <SelectItem value={StatusTransacao.RECEBIDO}>
+                <Badge className="bg-muted text-primary hover:bg-muted font-bold">
+                  <CircleIcon className="fill-primary mr-2" size={10} />
+                  Recebido
+                </Badge>
+              </SelectItem>
+              <SelectItem value={StatusTransacao.PENDENTE}>
+                <Badge className="bg-muted text-yellow-300 hover:bg-muted font-bold">
+                  <CircleIcon className="fill-yellow-300 mr-2" size={10} />
+                  Pendente
+                </Badge>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </>
       );
     },
   },

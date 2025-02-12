@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import {
   ColumnDef,
   flexRender,
@@ -17,24 +17,23 @@ import {
   TableRow,
 } from "@/app/_components/ui/table";
 import { Button } from "@/app/_components/ui/button";
-import { CircleIcon } from "lucide-react";
+
 import { TRANSACTION_CATEGORY_LABELS } from "@/app/_constants/transaction";
 import EditTransactionButton from "./edit-transaction-button";
 import DeleteTransactionButton from "./delete-transaction-button";
-import { Badge } from "@/app/_components/ui/badge";
-import TransactionTypeBadge from "./type-badge";
-import { Transacoes } from "@prisma/client";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+import TransactionTypeBadge from "./type-badge";
+import { StatusTransacao, Transacoes } from "@prisma/client";
+import { toast } from "sonner";
+import { updateStatusTransaction } from "../_actions/update-status-transaction";
+
+interface DataTableProps {
+  columns: ColumnDef<Transacoes>[];
+  data: Transacoes[];
 }
 
-export function DataTableTransactionsMobile<TData extends Transacoes, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
-  const [pagination, setPagination] = useState({
+export function DataTableTransactionsMobile({ columns, data }: DataTableProps) {
+  const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 8,
   });
@@ -49,7 +48,7 @@ export function DataTableTransactionsMobile<TData extends Transacoes, TValue>({
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getExpandedRowModel: getExpandedRowModel(), // Habilita a expansão de linhas
+    getExpandedRowModel: getExpandedRowModel(),
   });
 
   const nextPage = () => {
@@ -64,6 +63,21 @@ export function DataTableTransactionsMobile<TData extends Transacoes, TValue>({
       ...prev,
       pageIndex: Math.max(prev.pageIndex - 1, 0),
     }));
+  };
+
+  const handleStatusChange = async (
+    transactionId: string,
+    status: StatusTransacao
+  ) => {
+    try {
+      await updateStatusTransaction({ transactionId, status });
+      toast.success(`Status atualizado com sucesso ✔️`, {
+        className: "bg-[#55B02E] text-white border-none",
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar o status:", error);
+      toast.error("Erro ao atualizar o status. Tente novamente.");
+    }
   };
 
   return (
@@ -92,8 +106,6 @@ export function DataTableTransactionsMobile<TData extends Transacoes, TValue>({
                 <React.Fragment key={row.id}>
                   {/* Linha principal */}
                   <TableRow data-state={row.getIsExpanded() ? "expanded" : ""}>
-                    {/* Coluna de controle de expansão */}
-
                     {/* Renderização das células */}
                     {row.getVisibleCells().map((cell) => {
                       return (
@@ -106,6 +118,7 @@ export function DataTableTransactionsMobile<TData extends Transacoes, TValue>({
                       );
                     })}
                   </TableRow>
+
                   {/* Linha expandida (detalhes) */}
                   {row.getIsExpanded() && (
                     <TableRow>
@@ -132,17 +145,9 @@ export function DataTableTransactionsMobile<TData extends Transacoes, TValue>({
                           <p>
                             <strong>Categoria:</strong>{" "}
                             {
-                              <Badge className="text-white bg-white bg-opacity-10 font-bold hover:bg-muted">
-                                <CircleIcon
-                                  className="fill-white mr-2"
-                                  size={10}
-                                />
-                                {
-                                  TRANSACTION_CATEGORY_LABELS[
-                                    row.original.categoria
-                                  ]
-                                }
-                              </Badge>
+                              TRANSACTION_CATEGORY_LABELS[
+                                row.original.categoria
+                              ]
                             }
                           </p>
 
@@ -157,32 +162,65 @@ export function DataTableTransactionsMobile<TData extends Transacoes, TValue>({
 
                           {/* Status Pagamento */}
                           <p>
-                            <strong>Status Pagamento:</strong>{" "}
-                            {row.original.status === "PAGO" ? (
-                              <Badge className="bg-muted text-primary hover:bg-muted font-bold">
-                                <CircleIcon
-                                  className="fill-primary mr-2"
-                                  size={10}
-                                />
+                            <strong>Status Pagamento:</strong>
+                            <div className="flex space-x-2 mt-2">
+                              <Button
+                                variant={
+                                  row.original.status === StatusTransacao.PAGO
+                                    ? "default"
+                                    : "outline"
+                                }
+                                size="sm"
+                                onClick={() =>
+                                  handleStatusChange(
+                                    row.original.id,
+                                    StatusTransacao.PAGO
+                                  )
+                                }
+                              >
                                 Pago
-                              </Badge>
-                            ) : row.original.status === "RECEBIDO" ? (
-                              <Badge className="bg-muted text-primary hover:bg-muted font-bold">
-                                <CircleIcon
-                                  className="fill-primary mr-2"
-                                  size={10}
-                                />
+                              </Button>
+                              <Button
+                                variant={
+                                  row.original.status ===
+                                  StatusTransacao.RECEBIDO
+                                    ? "default"
+                                    : "outline"
+                                }
+                                size="sm"
+                                onClick={() =>
+                                  handleStatusChange(
+                                    row.original.id,
+                                    StatusTransacao.RECEBIDO
+                                  )
+                                }
+                              >
                                 Recebido
-                              </Badge>
-                            ) : (
-                              <Badge className="bg-muted text-yellow-300 hover:bg-muted font-bold">
-                                <CircleIcon
-                                  className="fill-yellow-300 mr-2"
-                                  size={10}
-                                />
+                              </Button>
+                              <Button
+                                variant={
+                                  row.original.status ===
+                                  StatusTransacao.PENDENTE
+                                    ? "default"
+                                    : "outline"
+                                }
+                                className={
+                                  row.original.status ===
+                                  StatusTransacao.PENDENTE
+                                    ? "bg-yellow-500 text-white hover:bg-yellow-600"
+                                    : ""
+                                }
+                                size="sm"
+                                onClick={() =>
+                                  handleStatusChange(
+                                    row.original.id,
+                                    StatusTransacao.PENDENTE
+                                  )
+                                }
+                              >
                                 Pendente
-                              </Badge>
-                            )}
+                              </Button>
+                            </div>
                           </p>
 
                           {/* Data Pagamento */}
