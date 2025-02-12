@@ -23,7 +23,7 @@ export const transactionsColumns: ColumnDef<Transacoes>[] = [
   },
   {
     accessorKey: "nome",
-    header: "Nome",
+    header: "Descrição",
   },
   {
     accessorKey: "tipo",

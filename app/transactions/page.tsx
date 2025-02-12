@@ -14,6 +14,8 @@ import {
   fetchTransactions,
   TransactionsProps,
 } from "./_actions/get-transactions";
+import { DataTableTransactionsMobile } from "./_components/data-table-transactions-mobile";
+import { transactionsColumnsMobile } from "./_columns/transactionsMobileColumns";
 
 const Transactions = async ({ searchParams }: TransactionsProps) => {
   const { userId } = await auth();
@@ -42,10 +44,21 @@ const Transactions = async ({ searchParams }: TransactionsProps) => {
             />
           </div>
         </div>
-        <DataTable
-          columns={transactionsColumns}
-          data={JSON.parse(JSON.stringify(transactions))}
-        />
+        {/* Tabela Desktop */}
+        <div className="hidden md:block">
+          <DataTable
+            columns={transactionsColumns}
+            data={JSON.parse(JSON.stringify(transactions))}
+          />
+        </div>
+
+        {/* Tabela Mobile */}
+        <div className="block md:hidden">
+          <DataTableTransactionsMobile
+            columns={transactionsColumnsMobile}
+            data={JSON.parse(JSON.stringify(transactions))}
+          />
+        </div>
       </div>
     </>
   );
