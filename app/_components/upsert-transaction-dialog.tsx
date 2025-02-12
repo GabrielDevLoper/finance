@@ -41,7 +41,7 @@ import {
   TRANSACTION_STATUS_OPTIONS,
   TRANSACTION_TYPE_OPTIONS,
 } from "../_constants/transaction";
-import { DatePicker } from "./ui/date-picker";
+
 import { Textarea } from "./ui/textarea";
 import { upsertTransaction } from "../_actions/add-transaction";
 import { useEffect, useState } from "react";
@@ -274,21 +274,6 @@ const UpserTransactionDialog = ({
                       </FormItem>
                     )}
                   />
-
-                  <FormField
-                    control={form.control}
-                    name="data_pagamento"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Data pagamento</FormLabel>
-                        <DatePicker
-                          value={field.value ?? undefined}
-                          onChange={field.onChange}
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                 </>
               )}
 
@@ -348,23 +333,25 @@ const UpserTransactionDialog = ({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="observacao"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Observação</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Digite alguma observação"
-                        {...field}
-                        value={field.value ?? ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {defaultValues && (
+                <FormField
+                  control={form.control}
+                  name="observacao"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Observação</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Digite alguma observação"
+                          {...field}
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
 
             <DialogFooter>

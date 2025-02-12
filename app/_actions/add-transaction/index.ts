@@ -32,9 +32,15 @@ export const upsertTransaction = async (params: addTransactionParams) => {
     throw new Error("Unauthorized");
   }
 
+  const transaction = {
+    ...params,
+    data_pagamento: params.status === StatusTransacao.PAGO ? new Date() : null,
+    id_usuario: userId,
+  };
+
   await db.transacoes.upsert({
-    update: { ...params, id_usuario: userId },
-    create: { ...params, id_usuario: userId },
+    update: { ...transaction },
+    create: { ...transaction },
     where: {
       id: params?.id ?? "",
     },
