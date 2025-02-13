@@ -4,7 +4,7 @@ import { db } from "@/app/_lib/prisma";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import OpenAI from "openai";
 import { verificarUsoApi } from "../verify-call-api-ai";
-import { Transacoes } from "@prisma/client";
+import { TipoTransacao, Transacoes } from "@prisma/client";
 
 type GenerateAirReportType = {
   month: string;
@@ -46,63 +46,102 @@ export const generateAiReport = async ({
     );
   }
 
-  // Função para formatar transações de forma clara e consistente
   const formatTransactions = (transactions: Transacoes[]) => {
     return transactions
       .map(({ mes, ano, valor, tipo, categoria }) => {
         const formattedDate = `${String(mes).padStart(2, "0")}/${ano}`;
-        const formattedValue = `R$${valor?.toFixed(2)}`; // Garante 2 casas decimais
-        return `${formattedDate}-${tipo}-${formattedValue}-${categoria}`;
+        const formattedValue = parseFloat(valor?.toString() ?? "0.0").toFixed(
+          2
+        ); // Garante 2 casas decimais
+        return `${formattedDate}-${tipo}-${formattedValue}-${
+          categoria || "Sem Categoria"
+        }`;
       })
       .join(";");
   };
 
-  // Cria o conteúdo do prompt com instruções claras para a IA
+  // Calcula os totais gerais para cada tipo de transação
+  const totalDespesas = transactions
+    .filter(({ tipo }) => tipo === TipoTransacao.DESPESA)
+    .reduce(
+      (total, { valor }) => total + parseFloat(valor?.toString() ?? "0.0"),
+      0
+    );
+
+  const totalDepositos = transactions
+    .filter(({ tipo }) => tipo === TipoTransacao.DEPOSITO)
+    .reduce(
+      (total, { valor }) => total + parseFloat(valor?.toString() ?? "0.0"),
+      0
+    );
+
+  const totalInvestimentos = transactions
+    .filter(({ tipo }) => tipo === TipoTransacao.INVESTIMENTO)
+    .reduce(
+      (total, { valor }) => total + parseFloat(valor?.toString() ?? "0.0"),
+      0
+    );
+
+  // Calcula os totais por categoria de despesa
+  const categoriasDespesas: { [key: string]: number } = {};
+  transactions
+    .filter(({ tipo }) => tipo === TipoTransacao.DESPESA)
+    .forEach(({ categoria, valor }) => {
+      if (!categoriasDespesas[categoria]) {
+        categoriasDespesas[categoria] = 0;
+      }
+      categoriasDespesas[categoria] += parseFloat(valor?.toString() ?? "0.0");
+    });
+
   // Cria o conteúdo do prompt com instruções claras para a IA
   const content = `
-Gere um relatório detalhado sobre minhas finanças, incluindo insights e dicas práticas para otimização financeira.
-Analise as transações fornecidas abaixo, seguindo as regras e instruções específicas:
-
-### Formato das Transações:
-As transações estão no formato: {DATA}-{TIPO}-{VALOR}-{CATEGORIA}
-Exemplo: 01/2023-despesa-150.00-Alimentação
-
-Transações:
-${formatTransactions(transactions)}
-
-### Regras para Análise:
-1. **Valores Monetários**:
-   - Certifique-se de que todos os valores sejam tratados como números com duas casas decimais.
-   - Ignore valores negativos ou nulos.
-   - Converta strings formatadas como "R$100,00" para números antes de realizar cálculos.
-
-2. **Filtragem por Tipo**:
-   - Separe as transações em três categorias principais: "receita", "despesa" e "investimento".
-   - Não misture tipos diferentes durante os cálculos.
-
-3. **Duplicidade**:
-   - Verifique se há transações duplicadas e remova-as antes de realizar qualquer cálculo.
-
-4. **Cálculos**:
-   - Calcule o total de receitas, despesas e investimentos separadamente.
-   - Identifique as categorias que mais impactam o orçamento (ex.: "Alimentação", "Transporte").
-   - Calcule o saldo final: Receitas - Despesas.
-
-5. **Insights e Sugestões**:
-   - Forneça sugestões para reduzir despesas desnecessárias.
-   - Indique oportunidades para aumentar receitas ou melhorar investimentos.
-   - Apresente os resultados de forma clara e objetiva.
-
-### Exemplo de Saída Esperada:
-- Total de Receitas: R$ X.XX
-- Total de Despesas: R$ X.XX
-- Total de Investimentos: R$ X.XX
-- Saldo Final: R$ X.XX
-- Categoria com Maior Gasto: [Nome da Categoria]
-- Sugestões de Otimização: [Lista de Sugestões]
-
-Por favor, siga estas instruções cuidadosamente para garantir que os valores e análises estejam corretos.
-`;
+  Gere um relatório detalhado sobre minhas finanças, incluindo insights e dicas práticas para otimização financeira.
+  Analise as transações fornecidas abaixo, seguindo as regras e instruções específicas:
+  
+  ### Formato das Transações:
+  As transações estão no formato: {DATA}-{TIPO}-{VALOR}-{CATEGORIA}
+  Exemplo: 01/2023-despesa-150.00-Alimentação
+  
+  Transações:
+  ${formatTransactions(transactions)}
+  
+  ### Totais Gerais:
+  - Total de Despesas: R$ ${totalDespesas.toFixed(2)}
+  - Total de Depósitos: R$ ${totalDepositos.toFixed(2)}
+  - Total de Investimentos: R$ ${totalInvestimentos.toFixed(2)}
+  
+  ### Regras para Análise:
+  1. **Valores Monetários**:
+     - Certifique-se de que todos os valores sejam tratados como números com duas casas decimais.
+     - Ignore valores negativos ou nulos.
+     - Converta strings formatadas como "R$100,00" para números antes de realizar cálculos.
+  
+  2. **Filtragem por Tipo**:
+     - Os tipos de transação são: "despesa", "deposito" e "investimento".
+     - Separe as transações por tipo e calcule os totais gerais.
+  
+  3. **Categorias de Despesas**:
+     - Para as despesas, agrupe os valores por categoria.
+     - Identifique as categorias que mais impactam o orçamento.
+  
+  4. **Insights e Sugestões**:
+     - Forneça sugestões para reduzir despesas desnecessárias, especialmente nas categorias com maior gasto.
+     - Indique oportunidades para aumentar depósitos ou melhorar investimentos.
+     - Apresente os resultados de forma clara e objetiva.
+  
+  ### Exemplo de Saída Esperada:
+  - Total de Despesas: R$ X.XX
+  - Total de Depósitos: R$ X.XX
+  - Total de Investimentos: R$ X.XX
+  - Categorias de Despesas:
+    - Alimentação: R$ X.XX
+    - Transporte: R$ X.XX
+    - Outros: R$ X.XX
+  - Categoria com Maior Gasto: [Nome da Categoria]
+  - Sugestões de Otimização: [Lista de Sugestões]
+  
+  Por favor, siga estas instruções cuidadosamente para garantir que os valores e análises estejam corretos.
+  `;
 
   // Chamada à OpenAI
   const completion = await openai.chat.completions.create({
