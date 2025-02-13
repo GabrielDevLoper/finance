@@ -58,21 +58,50 @@ export const generateAiReport = async ({
   };
 
   // Cria o conteúdo do prompt com instruções claras para a IA
+  // Cria o conteúdo do prompt com instruções claras para a IA
   const content = `
 Gere um relatório detalhado sobre minhas finanças, incluindo insights e dicas práticas para otimização financeira.
-Analise as transações fornecidas abaixo, separando-as corretamente por tipo (receita, despesa ou investimento) e categoria.
-Certifique-se de não cometer erros nos valores e organize os dados de forma clara.
+Analise as transações fornecidas abaixo, seguindo as regras e instruções específicas:
 
-Formato das transações: {DATA}-{TIPO}-{VALOR}-{CATEGORIA}
+### Formato das Transações:
+As transações estão no formato: {DATA}-{TIPO}-{VALOR}-{CATEGORIA}
+Exemplo: 01/2023-despesa-150.00-Alimentação
+
 Transações:
 ${formatTransactions(transactions)}
 
-Instruções adicionais:
-1. Calcule o total de receitas, despesas e investimentos.
-2. Identifique as categorias que mais impactam meu orçamento.
-3. Sugira formas de reduzir despesas desnecessárias.
-4. Indique oportunidades de aumento de receitas ou melhores investimentos.
-5. Apresente os resultados de forma clara e objetiva.
+### Regras para Análise:
+1. **Valores Monetários**:
+   - Certifique-se de que todos os valores sejam tratados como números com duas casas decimais.
+   - Ignore valores negativos ou nulos.
+   - Converta strings formatadas como "R$100,00" para números antes de realizar cálculos.
+
+2. **Filtragem por Tipo**:
+   - Separe as transações em três categorias principais: "receita", "despesa" e "investimento".
+   - Não misture tipos diferentes durante os cálculos.
+
+3. **Duplicidade**:
+   - Verifique se há transações duplicadas e remova-as antes de realizar qualquer cálculo.
+
+4. **Cálculos**:
+   - Calcule o total de receitas, despesas e investimentos separadamente.
+   - Identifique as categorias que mais impactam o orçamento (ex.: "Alimentação", "Transporte").
+   - Calcule o saldo final: Receitas - Despesas.
+
+5. **Insights e Sugestões**:
+   - Forneça sugestões para reduzir despesas desnecessárias.
+   - Indique oportunidades para aumentar receitas ou melhorar investimentos.
+   - Apresente os resultados de forma clara e objetiva.
+
+### Exemplo de Saída Esperada:
+- Total de Receitas: R$ X.XX
+- Total de Despesas: R$ X.XX
+- Total de Investimentos: R$ X.XX
+- Saldo Final: R$ X.XX
+- Categoria com Maior Gasto: [Nome da Categoria]
+- Sugestões de Otimização: [Lista de Sugestões]
+
+Por favor, siga estas instruções cuidadosamente para garantir que os valores e análises estejam corretos.
 `;
 
   // Chamada à OpenAI
