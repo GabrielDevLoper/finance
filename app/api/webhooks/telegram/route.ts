@@ -8,7 +8,17 @@ import { NextResponse } from "next/server";
 export const POST = async (req: Request) => {
   const body = await req.text(); // Obtendo o corpo da requisição
 
-  return NextResponse.json({ body });
+  // Expressão regular para capturar o JSON dentro do texto
+  const jsonMatch = body.match(/\{[\s\S]*\}/);
+
+  if (!jsonMatch) {
+    return NextResponse.json(
+      { error: "Nenhum JSON encontrado na resposta." },
+      { status: 400 }
+    );
+  }
+  const jsonData = JSON.parse(jsonMatch[0]); // Convertendo para objeto JSON
+  return NextResponse.json(jsonData); // Retornando apenas o JSON
 
   // const userListResponse = await clerkClient().users.getUserList({
   //   emailAddress: body.email,
