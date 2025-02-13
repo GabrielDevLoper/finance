@@ -4,6 +4,7 @@ import { db } from "@/app/_lib/prisma";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import OpenAI from "openai";
 import { verificarUsoApi } from "../verify-call-api-ai";
+import { Transacoes } from "@prisma/client";
 
 type GenerateAirReportType = {
   month: string;
@@ -45,14 +46,34 @@ export const generateAiReport = async ({
     );
   }
 
-  const content = `Gere um relatório com insights sobre minhas finanças, incluindo dicas para otimização financeira. 
-  As transações estão formatadas como {DATA}-{TIPO}-{VALOR}-{CATEGORIA}, separadas por ponto e vírgula:
-  ${transactions
-    .map(
-      ({ mes, ano, valor, tipo, categoria }) =>
-        `${String(mes).padStart(2, "0")}/${ano}-R$${valor}-${tipo}-${categoria}`
-    )
-    .join(";")}`;
+  // Função para formatar transações de forma clara e consistente
+  const formatTransactions = (transactions: Transacoes[]) => {
+    return transactions
+      .map(({ mes, ano, valor, tipo, categoria }) => {
+        const formattedDate = `${String(mes).padStart(2, "0")}/${ano}`;
+        const formattedValue = `R$${valor?.toFixed(2)}`; // Garante 2 casas decimais
+        return `${formattedDate}-${tipo}-${formattedValue}-${categoria}`;
+      })
+      .join(";");
+  };
+
+  // Cria o conteúdo do prompt com instruções claras para a IA
+  const content = `
+Gere um relatório detalhado sobre minhas finanças, incluindo insights e dicas práticas para otimização financeira.
+Analise as transações fornecidas abaixo, separando-as corretamente por tipo (receita, despesa ou investimento) e categoria.
+Certifique-se de não cometer erros nos valores e organize os dados de forma clara.
+
+Formato das transações: {DATA}-{TIPO}-{VALOR}-{CATEGORIA}
+Transações:
+${formatTransactions(transactions)}
+
+Instruções adicionais:
+1. Calcule o total de receitas, despesas e investimentos.
+2. Identifique as categorias que mais impactam meu orçamento.
+3. Sugira formas de reduzir despesas desnecessárias.
+4. Indique oportunidades de aumento de receitas ou melhores investimentos.
+5. Apresente os resultados de forma clara e objetiva.
+`;
 
   // Chamada à OpenAI
   const completion = await openai.chat.completions.create({
