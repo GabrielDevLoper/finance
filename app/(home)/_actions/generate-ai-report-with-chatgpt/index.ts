@@ -60,12 +60,12 @@ export const generateAiReport = async ({
 
   // Chamada à OpenAI
   const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o-mini",
     messages: [
       {
         role: "system",
         content:
-          "Você é um especialista em gestão e organização de finanaças pessoais. você ajuda pessoas a organizarem melhor as suas finanças",
+          "Você é um especialista em gestão e organização de finanças pessoais. você ajuda pessoas a organizarem melhor as suas finanças e da dicas de investimentos em renda fixa, ações, fundos imobiliarios e etf exterior.",
       },
       { role: "user", content },
     ],

@@ -14,13 +14,16 @@ export const updateStatusTransaction = async ({
   status,
 }: UpdateTransactionType) => {
   try {
+    const data = {
+      data_pagamento: status === StatusTransacao.PAGO ? new Date() : null,
+      status,
+    };
+
     await db.transacoes.update({
       where: {
         id: transactionId,
       },
-      data: {
-        status,
-      },
+      data,
     });
 
     revalidatePath("/transactions");
