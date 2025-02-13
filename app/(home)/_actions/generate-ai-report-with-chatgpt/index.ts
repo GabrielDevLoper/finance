@@ -65,7 +65,7 @@ export const generateAiReport = async ({
       {
         role: "system",
         content:
-          "Você é um especialista em gestão e organização de finanças pessoais. você ajuda pessoas a organizarem melhor as suas finanças e da dicas de investimentos em renda fixa, ações, fundos imobiliarios e etf exterior.",
+          "Você é um especialista em gestão e organização de finanças pessoais. você ajuda pessoas a organizarem melhor as suas finanças.",
       },
       { role: "user", content },
     ],
