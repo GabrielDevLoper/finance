@@ -18,7 +18,7 @@ export const POST = async (req: Request) => {
     );
   }
   const jsonData = JSON.parse(jsonMatch[0]); // Convertendo para objeto JSON
-  return NextResponse.json({ message: jsonData.nome }); // Retornando apenas o JSON
+  return NextResponse.json(jsonData); // Retornando apenas o JSON
 
   // const userListResponse = await clerkClient().users.getUserList({
   //   emailAddress: body.email,
