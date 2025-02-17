@@ -56,13 +56,6 @@ O **Finance IA** é uma aplicação que utiliza tecnologias modernas para oferec
   - Configurar variáveis de autenticação do Stripe no ambiente da aplicação.
   - Implementar endpoints para lidar com pagamentos, assinaturas e webhooks.
 
-### **Twilio**
-
-- Serviço de comunicação utilizado para envio de mensagens via WhatsApp.
-- **Funcionalidades implementadas:**
-  - Integração de dados do sistema para envio de notificações automatizadas.
-  - Comunicação bidirecional entre usuários e a aplicação.
-
 ### **OpenAI (ChatGPT ou DeepSeek)**
 
 - API de inteligência artificial utilizada para:
@@ -95,7 +88,6 @@ O **Finance IA** é uma aplicação que utiliza tecnologias modernas para oferec
 | **PostgreSQL**   | Armazenamento seguro e escalável de dados relacionais.                   |
 | **Neon DB**      | Serviço de banco de dados PostgreSQL gerenciado e hospedado na nuvem.    |
 | **Stripe**       | Processamento de pagamentos e gerenciamento de assinaturas.              |
-| **Twilio**       | Comunicação via WhatsApp e integração de dados com o sistema.            |
 | **OpenAI**       | Inteligência artificial para análise e automação de tarefas financeiras. |
 | **Vercel**       | Hospedagem robusta e escalável para a aplicação.                         |
 
