@@ -17,8 +17,8 @@ export const POST = async (req: Request) => {
       { status: 400 }
     );
   }
-  const jsonData = JSON.parse(jsonMatch[0]);
-  return NextResponse.json(jsonData); // Retornando apenas o JSON
+  // const jsonData = JSON.parse(jsonMatch[0]);
+  return NextResponse.json(jsonMatch); // Retornando apenas o JSON
 
   // const userListResponse = await clerkClient().users.getUserList({
   //   emailAddress: body.email,
