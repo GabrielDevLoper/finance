@@ -6,7 +6,7 @@
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
-  const body = await req.text(); // Obtendo o corpo da requisição
+  const body = await req.json(); // Obtendo o corpo da requisição
 
   // Expressão regular para capturar o JSON dentro do texto
   // const jsonMatch = body.match(/\{[\s\S]*\}/);
