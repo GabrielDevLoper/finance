@@ -6,19 +6,19 @@
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
-  const body = await req.json(); // Obtendo o corpo da requisição
+  const body = await req.text(); // Obtendo o corpo da requisição
 
   // Expressão regular para capturar o JSON dentro do texto
-  // const jsonMatch = body.match(/\{[\s\S]*\}/);
+  const jsonMatch = body.match(/\{[\s\S]*\}/);
 
-  // if (!jsonMatch) {
-  //   return NextResponse.json(
-  //     { error: "Nenhum JSON encontrado na resposta." },
-  //     { status: 400 }
-  //   );
-  // }
-  // const jsonData = JSON.parse(jsonMatch[0]);
-  return NextResponse.json(body); // Retornando apenas o JSON
+  if (!jsonMatch) {
+    return NextResponse.json(
+      { error: "Nenhum JSON encontrado na resposta." },
+      { status: 400 }
+    );
+  }
+  const jsonData = JSON.parse(jsonMatch[0]);
+  return NextResponse.json(jsonData); // Retornando apenas o JSON
 
   // const userListResponse = await clerkClient().users.getUserList({
   //   emailAddress: body.email,
