@@ -6,20 +6,34 @@
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
-  const body = await req.text(); // Obtendo o corpo da requisição
+  const body = await req.json(); // Obtendo o corpo da requisição como JSON
 
-  // Expressão regular para capturar o JSON dentro do texto
-  // const jsonMatch = body.match(/\{[\s\S]*\}/);
+  if (!Array.isArray(body) || body.length === 0 || !body[0].result) {
+    return NextResponse.json(
+      { error: "Formato inválido ou JSON não encontrado na resposta." },
+      { status: 400 }
+    );
+  }
 
-  // if (!jsonMatch) {
-  //   return NextResponse.json(
-  //     { error: "Nenhum JSON encontrado na resposta." },
-  //     { status: 400 }
-  //   );
-  // }
-  // const jsonData = JSON.parse(jsonMatch[0]);
-  return NextResponse.json({ body }); // Retornando apenas o JSON
+  // Expressão regular para capturar o JSON dentro da string "result"
+  const jsonMatch = body[0].result.match(/\{[\s\S]*\}/);
 
+  if (!jsonMatch) {
+    return NextResponse.json(
+      { error: "Nenhum JSON válido encontrado na resposta." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const jsonData = JSON.parse(jsonMatch[0]);
+    return NextResponse.json({ data: jsonData });
+  } catch {
+    return NextResponse.json(
+      { error: "Falha ao converter a string em JSON." },
+      { status: 400 }
+    );
+  }
   // const userListResponse = await clerkClient().users.getUserList({
   //   emailAddress: body.email,
   // });
